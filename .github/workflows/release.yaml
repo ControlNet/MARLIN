@@ -1,0 +1,52 @@
+name: Release
+on:
+  push:
+    branches:
+      - "master"
+jobs:
+
+  release:
+    needs: [build-web, unittest]
+    runs-on: ubuntu-20.04
+
+    strategy:
+      matrix:
+        python-version: ["3.9"]
+
+    steps:
+      - uses: actions/checkout@v2
+
+      - name: Set up Python
+        uses: actions/setup-python@v2
+        with:
+          python-version: ${{ matrix.python-version }}
+          architecture: x64
+
+      - name: Install dependencies
+        run: |
+          pip install -r requirements.txt
+          python init.py
+
+      - name: Build package for marlin_pytorch
+        run: python setup.py sdist bdist_wheel
+
+      - name: Release marlin_pytorch to PyPI
+        uses: pypa/gh-action-pypi-publish@release/v1
+        with:
+          user: __token__
+          password: ${{ secrets.PYPI_API_TOKEN }}
+
+      - name: Get the version
+        run: |
+          VER=$(cat version.txt)
+          echo "VERSION=$VER" >> $GITHUB_ENV
+
+      - name: Release to GitHub Release
+        uses: marvinpinto/action-automatic-releases@latest
+        with:
+          repo_token: "${{ secrets.GITHUB_TOKEN }}"
+          automatic_release_tag: "${{ env.VERSION }}"
+          title: "[${{ env.VERSION }}] Marlin-PyTorch Release"
+          prerelease: false
+          files: "dist/*"
+          draft: true

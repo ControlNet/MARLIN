@@ -1,11 +1,12 @@
+import shutil
 from collections import deque
 from pathlib import Path
 from typing import Generator
 from urllib.request import urlretrieve
 
+import cv2
 import ffmpeg
 import torch
-import cv2
 from torch import Tensor
 from torch.nn import Linear, Module
 
@@ -186,6 +187,15 @@ class Marlin(Module):
         path = Path(".marlin")
         path.mkdir(exist_ok=True)
         file = path / url.split("/")[-1]
-        with DownloadProgressBar(unit="B", unit_scale=True, miniters=1, desc="Downloading Marlin model") as pb:
-            urlretrieve(url, filename=file, reporthook=pb.update_to)
+        if not file.exists():
+            with DownloadProgressBar(unit="B", unit_scale=True, miniters=1, desc="Downloading Marlin model") as pb:
+                urlretrieve(url, filename=file, reporthook=pb.update_to)
         return cls.from_file(str(file))
+
+    @classmethod
+    def clean_cache(cls, verbose: bool = True) -> None:
+        path = Path(".marlin")
+        if path.exists():
+            shutil.rmtree(path)
+            if verbose:
+                print("Marlin checkpoints cache cleaned.")

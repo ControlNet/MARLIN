@@ -61,6 +61,7 @@ jobs:
           pip install torch==${{ matrix.torch-version }}
           pip install torchvision==${{ matrix.torchvision-version }}
           pip install -r requirements.txt
+          python init.py
 
       - name: Download model checkpoints
         run: |

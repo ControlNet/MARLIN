@@ -259,13 +259,7 @@ node_modules
 .idea
 scratch*.py
 scratch*.ipynb
-/src/tensorneko/version.txt
-/src/tensorneko_util/visualization/watcher/web/public/*
-!/src/tensorneko_util/visualization/watcher/web/public/index.html
-/src/tensorneko_util/visualization/watcher/web/package-lock.json
-/watcher
-/src/tensorneko_util/version.txt
-/test/resource/temp_output
+/src/marlin_pytorch/version.txt
 marlin.encoder.pt
 marlin.full.pt
 .marlin
