@@ -1,0 +1,76 @@
+name: Unittest
+on:
+  push:
+    branches-ignore:
+      - "master"
+jobs:
+  unittest:
+    name: Unittest
+
+    strategy:
+      fail-fast: false
+      matrix:
+        python-version: ["3.6", "3.7", "3.8", "3.9", "3.10"]
+        torch-version: ["1.8.*", "1.9.*", "1.10.*", "1.11.*", "1.12.*", "1.13.*"]
+        include:
+          - torch-version: "1.8.*"
+            torchvision-version: "0.9.*"
+          - torch-version: "1.9.*"
+            torchvision-version: "0.10.*"
+          - torch-version: "1.10.*"
+            torchvision-version: "0.11.*"
+          - torch-version: "1.11.*"
+            torchvision-version: "0.12.*"
+          - torch-version: "1.12.*"
+            torchvision-version: "0.13.*"
+          - torch-version: "1.13.*"
+            torchvision-version: "0.14.*"
+        exclude:
+          - python-version: "3.6"
+            torch-version: "1.11.*"
+          - python-version: "3.6"
+            torch-version: "1.12.*"
+          - python-version: "3.6"
+            torch-version: "1.13.*"
+          - python-version: "3.10"
+            torch-version: "1.8.*"
+          - python-version: "3.10"
+            torch-version: "1.9.*"
+          - python-version: "3.10"
+            torch-version: "1.10.*"
+
+    runs-on: ubuntu-20.04
+
+    steps:
+      - uses: actions/checkout@v3
+
+      - name: Set up Python
+        uses: actions/setup-python@v4
+        with:
+          python-version: ${{ matrix.python-version }}
+          architecture: x64
+
+      - name: Install PyAV Dependencies for Python 3.6
+        if: matrix.python-version == '3.6'
+        run: |
+          sudo apt install -y libavformat-dev libavdevice-dev
+
+      - name: Install dependencies
+        run: |
+          sudo apt install -y ffmpeg wget
+          pip install torch==${{ matrix.torch-version }}
+          pip install torchvision==${{ matrix.torchvision-version }}
+          pip install -r requirements.txt
+          python init.py
+
+      - name: Download model checkpoints
+        run: |
+          mkdir test/model
+          wget -O test/model/marlin.encoder.pt https://github.com/ControlNet/MARLIN/releases/download/model_v1/marlin.encoder.pt
+          wget -O test/model/marlin.full.pt https://github.com/ControlNet/MARLIN/releases/download/model_v1/marlin.full.pt
+
+      - name: Set PYTHONPATH
+        run: echo "PYTHONPATH=$(pwd)/src" >> $GITHUB_ENV
+
+      - name: Run Test
+        run: python -m unittest discover test

@@ -1,0 +1,24 @@
+cff-version: 1.2.0
+message: "If you find this work useful in your research, please cite it."
+preferred-citation:
+  type: article
+  authors:
+  - family-names: "Cai"
+    given-names: "Zhixi"
+  - family-names: "Ghosh"
+    given-names: "Shreya"
+  - family-names: "Stefanov"
+    given-names: "Kalin"
+  - family-names: "Dhall"
+    given-names: "Abhinav"
+  - family-names: "Cai"
+    given-names: "Jianfei"
+  - family-names: "Rezatofighi"
+    given-names: "Hamid"
+  - family-names: "Haffari"
+    given-names: "Reza"
+  - family-names: "Hayat"
+    given-names: "Munawar"
+  journal: "arXiv preprint arXiv:2211.06627"
+  title: "MARLIN: Masked Autoencoder for facial video Representation LearnINg"
+  year: 2022
