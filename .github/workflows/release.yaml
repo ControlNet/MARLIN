@@ -6,7 +6,6 @@ on:
 jobs:
 
   release:
-    needs: [build-web, unittest]
     runs-on: ubuntu-20.04
 
     strategy:
