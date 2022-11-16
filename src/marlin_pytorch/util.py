@@ -1,9 +1,11 @@
-from typing import List, Any, TypeVar
+from typing import List, Any, TypeVar, Union
 from typing import Type, Dict
 
+import numpy as np
 import torchvision
 import yaml
 from einops import rearrange
+from numpy import ndarray
 from torch import Tensor
 from torch.nn import functional as F
 from tqdm.auto import tqdm
@@ -69,3 +71,37 @@ class Singleton:
     def __new__(cls, clazz: Type[T]) -> T:
         cls.all_instances[clazz] = clazz()
         return cls.all_instances[clazz]
+
+
+def crop_with_padding(image: ndarray, x1: int, x2: int, y1: int, y2: int, pad_value: Union[int, float] = 0.,
+    batch: bool = False
+) -> ndarray:
+    assert y2 > y1 and x2 > x1, "Should follow y2 > y1 and x2 > x1"
+
+    if not batch:
+        image = image[np.newaxis, ...]
+
+    crop_shape = np.array([y2 - y1, x2 - x1])
+
+    if len(image.shape) == 3:
+        b, h, w = image.shape
+        cropped = np.full((b, *crop_shape), pad_value, dtype=image.dtype)
+    elif len(image.shape) == 4:
+        b, h, w, c = image.shape
+        cropped = np.full((b, *crop_shape, c), pad_value, dtype=image.dtype)
+    else:
+        raise ValueError("Invalid shape, the image should be one of following shapes: ([B,] H, W) or ([B,] H, W, C)")
+
+    # compute cropped index of image
+    image_y_start, image_x_start = np.clip([y1, x1], 0, [h, w])
+    image_y_end, image_x_end = np.clip([y2, x2], 0, [h, w])
+
+    # compute target index of output
+    crop_y_start, crop_x_start = np.clip([-y1, -x1], 0, crop_shape)
+    crop_y_end, crop_x_end = crop_shape - np.clip([y2 - h, x2 - w], 0, crop_shape)
+
+    # assign values
+    cropped[:, crop_y_start:crop_y_end, crop_x_start:crop_x_end] = \
+        image[:, image_y_start:image_y_end, image_x_start:image_x_end]
+
+    return cropped if batch else cropped[0]
