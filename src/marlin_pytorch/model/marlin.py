@@ -2,7 +2,7 @@ import os.path
 import shutil
 from collections import deque
 from pathlib import Path
-from typing import Generator
+from typing import Generator, Optional
 from urllib.request import urlretrieve
 
 import cv2
@@ -120,7 +120,8 @@ class Marlin(Module):
     def extract_video(self, video_path: str, crop_face: bool = False, sample_rate: int = 2,
         stride: int = 16,
         reduction: str = "none",
-        keep_seq: bool = False
+        keep_seq: bool = False,
+        detector_device: Optional[str] = None
     ) -> Tensor:
         self.eval()
         features = []
@@ -129,7 +130,10 @@ class Marlin(Module):
             if crop_face:
                 if not FaceXZooFaceDetector.inited:
                     Path(".marlin").mkdir(exist_ok=True)
-                    FaceXZooFaceDetector.init(FaceXZooFaceDetector.install(os.path.join(".marlin", "FaceXZoo")))
+                    FaceXZooFaceDetector.init(
+                        face_sdk_path=FaceXZooFaceDetector.install(os.path.join(".marlin", "FaceXZoo")),
+                        device=detector_device or self.device
+                    )
                 v = self._crop_face(v)
             assert v.shape[3:] == (224, 224)
             features.append(self.extract_features(v, keep_seq=keep_seq))
