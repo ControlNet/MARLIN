@@ -1,18 +1,22 @@
+import os.path
 import shutil
 from collections import deque
 from pathlib import Path
-from typing import Generator
+from typing import Generator, Optional
 from urllib.request import urlretrieve
 
 import cv2
 import ffmpeg
+import numpy as np
 import torch
+from einops import rearrange
 from torch import Tensor
 from torch.nn import Linear, Module
+from ..face_detector import FaceXZooFaceDetector
 
 from .decoder import MarlinDecoder
 from .encoder import MarlinEncoder
-from .util import read_video, padding_video, DownloadProgressBar
+from ..util import read_video, padding_video, DownloadProgressBar
 
 
 class Marlin(Module):
@@ -101,17 +105,35 @@ class Marlin(Module):
         return self.encoder.extract_features(x, seq_mean_pool=not keep_seq)
 
     def _crop_face(self, v: Tensor) -> Tensor:
-        raise NotImplementedError("Please crop the face and resized to 224x224 before passing the video to the model.")
+        # use face sdk to crop face
+        # v: (1, C, T, H, W)
+        v = (rearrange(v, "b c t h w -> (b t) h w c").cpu().numpy() * 255).astype(np.uint8)
+        face_frames = []
+        for i in range(v.shape[0]):
+            # crop_face result: (H, W, C)
+            face_frames.append(torch.from_numpy(FaceXZooFaceDetector.crop_face(v[i])[0]))
+
+        faces = torch.stack(face_frames)  # (T, H, W, C)
+        return rearrange(faces, "(b t) h w c -> b c t h w", b=1).to(self.device) / 255
 
     @torch.no_grad()
-    def extract_video(self, video_path: str, sample_rate: int = 2, stride: int = 16, reduction: str = "none",
-        keep_seq: bool = False
+    def extract_video(self, video_path: str, crop_face: bool = False, sample_rate: int = 2,
+        stride: int = 16,
+        reduction: str = "none",
+        keep_seq: bool = False,
+        detector_device: Optional[str] = None
     ) -> Tensor:
         self.eval()
         features = []
         for v in self._load_video(video_path, sample_rate, stride):
             # v: (1, C, T, H, W)
-            if v.shape[3:] != (224, 224):
+            if crop_face:
+                if not FaceXZooFaceDetector.inited:
+                    Path(".marlin").mkdir(exist_ok=True)
+                    FaceXZooFaceDetector.init(
+                        face_sdk_path=FaceXZooFaceDetector.install(os.path.join(".marlin", "FaceXZoo")),
+                        device=detector_device or self.device
+                    )
                 v = self._crop_face(v)
             assert v.shape[3:] == (224, 224)
             features.append(self.extract_features(v, keep_seq=keep_seq))

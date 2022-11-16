@@ -30,8 +30,16 @@ class TestMarlinPytorch(unittest.TestCase):
         self.assertTrue(True)
 
     def test_extract_wild_video(self):
-        # not implemented yet
-        pass
+        model = Marlin.from_file(os.path.join("test", "model", "marlin.encoder.pt"))
+        if self.USE_GPU:
+            model.cuda()
+
+        for video in self.WILD_VIDEOS:
+            feat = model.extract_video(os.path.join("test", "input_sample", f"{video}.mp4"), crop_face=True)
+            feat = feat.cpu().numpy()
+            true = np.load(os.path.join("test", "output_sample", f"{video}.npy"))
+            diff = np.abs(feat - true).mean()
+            self.assertTrue(diff < 1.5e-4)
 
     def test_extract_cropped_video(self):
         model = Marlin.from_file(os.path.join("test", "model", "marlin.encoder.pt"))
