@@ -6,3 +6,4 @@ ffmpeg-python >= 0.2.0
 opencv-python >= 4.3
 av >= 6.0
 tqdm >= 4.*
+pyyaml >= 5.0

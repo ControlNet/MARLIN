@@ -3,7 +3,7 @@ from einops import rearrange
 from torch import nn, Tensor
 from torch.nn import LayerNorm, Linear, ModuleList
 
-from .util import Block, no_grad_trunc_normal_
+from .modules import Block, no_grad_trunc_normal_
 from .positional_embedding import SinCosPositionalEmbedding
 
 

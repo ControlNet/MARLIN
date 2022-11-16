@@ -1,7 +1,7 @@
 from torch import nn, Tensor
 from torch.nn import ModuleList, LayerNorm
 
-from .util import PatchEmbedding3d, Block
+from .modules import PatchEmbedding3d, Block
 from .positional_embedding import SinCosPositionalEmbedding
 
 

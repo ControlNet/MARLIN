@@ -1,7 +1,7 @@
 import torch
 from torch import Tensor, nn
 
-from .util import Shape
+from .modules import Shape
 
 
 class PositionalEmbedding(nn.Module):
