@@ -6,10 +6,10 @@
 import os
 import sys
 
-sys.path.append(os.path.join("utils", "face_sdk", "models", "network_def"))
+sys.path.append(os.path.join("util", "face_sdk", "models", "network_def"))
 import logging.config
 
-logging.config.fileConfig(os.path.join("utils", "face_sdk", "config", "logging.conf"))
+logging.config.fileConfig(os.path.join("util", "face_sdk", "config", "logging.conf"))
 logger = logging.getLogger('sdk')
 from abc import ABCMeta, abstractmethod
 

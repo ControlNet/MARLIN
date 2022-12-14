@@ -10,8 +10,8 @@ import cv2
 import numpy as np
 from skimage import transform as trans
 
-from utils.face_sdk.core.image_cropper.BaseImageCropper import BaseImageCropper
-from utils.face_sdk.utils.lms_trans import lms106_2_lms5, lms25_2_lms5
+from util.face_sdk.core.image_cropper.BaseImageCropper import BaseImageCropper
+from util.face_sdk.utils.lms_trans import lms106_2_lms5, lms25_2_lms5
 
 src1 = np.array([
     [51.642, 50.115],

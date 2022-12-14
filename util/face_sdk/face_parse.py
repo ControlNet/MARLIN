@@ -11,12 +11,12 @@ import torch
 import yaml
 from tqdm.auto import tqdm
 
-from utils.face_sdk.core.model_handler.face_alignment.FaceAlignModelHandler import FaceAlignModelHandler
-from utils.face_sdk.core.model_handler.face_detection.FaceDetModelHandler import FaceDetModelHandler
-from utils.face_sdk.core.model_handler.face_parsing.FaceParsingModelHandler import FaceParsingModelHandler
-from utils.face_sdk.core.model_loader.face_alignment.FaceAlignModelLoader import FaceAlignModelLoader
-from utils.face_sdk.core.model_loader.face_detection.FaceDetModelLoader import FaceDetModelLoader
-from utils.face_sdk.core.model_loader.face_parsing.FaceParsingModelLoader import FaceParsingModelLoader
+from util.face_sdk.core.model_handler.face_alignment.FaceAlignModelHandler import FaceAlignModelHandler
+from util.face_sdk.core.model_handler.face_detection.FaceDetModelHandler import FaceDetModelHandler
+from util.face_sdk.core.model_handler.face_parsing.FaceParsingModelHandler import FaceParsingModelHandler
+from util.face_sdk.core.model_loader.face_alignment.FaceAlignModelLoader import FaceAlignModelLoader
+from util.face_sdk.core.model_loader.face_detection.FaceDetModelLoader import FaceDetModelLoader
+from util.face_sdk.core.model_loader.face_parsing.FaceParsingModelLoader import FaceParsingModelLoader
 
 mpl_logger = logging.getLogger('matplotlib')
 mpl_logger.setLevel(logging.WARNING)

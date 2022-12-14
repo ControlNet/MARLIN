@@ -7,7 +7,7 @@
 import logging.config
 import os
 
-logging.config.fileConfig(os.path.join("utils", "face_sdk", "config", "logging.conf"))
+logging.config.fileConfig(os.path.join("util", "face_sdk", "config", "logging.conf"))
 logger = logging.getLogger('sdk')
 
 import torch
@@ -16,8 +16,8 @@ from math import ceil
 from itertools import product as product
 import torch.backends.cudnn as cudnn
 
-from utils.face_sdk.core.model_handler.BaseModelHandler import BaseModelHandler
-from utils.face_sdk.utils.BuzException import *
+from util.face_sdk.core.model_handler.BaseModelHandler import BaseModelHandler
+from util.face_sdk.utils.BuzException import *
 
 
 class FaceDetModelHandler(BaseModelHandler):

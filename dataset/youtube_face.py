@@ -11,7 +11,7 @@ from torch import Tensor
 from torch.nn import functional as F
 from torch.utils.data import Dataset, DataLoader
 
-from utils.misc import sample_indexes
+from util.misc import sample_indexes
 
 
 class YoutubeFace(Dataset):

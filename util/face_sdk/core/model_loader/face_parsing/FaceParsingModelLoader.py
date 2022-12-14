@@ -7,12 +7,12 @@
 import logging.config
 import os
 
-logging.config.fileConfig(os.path.join("utils", "face_sdk", "config", "logging.conf"))
+logging.config.fileConfig(os.path.join("util", "face_sdk", "config", "logging.conf"))
 logger = logging.getLogger('sdk')
 
 import torch
 
-from utils.face_sdk.core.model_loader.BaseModelLoader import BaseModelLoader
+from util.face_sdk.core.model_loader.BaseModelLoader import BaseModelLoader
 
 class FaceParsingModelLoader(BaseModelLoader):
     def __init__(self, model_path, model_category, model_name, meta_file='model_meta.json'):

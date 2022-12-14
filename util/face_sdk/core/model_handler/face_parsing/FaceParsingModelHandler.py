@@ -9,17 +9,17 @@
 import logging.config
 import os
 
-from utils.face_sdk.utils.BuzException import InputError
+from util.face_sdk.utils.BuzException import InputError
 
-logging.config.fileConfig(os.path.join("utils", "face_sdk", "config", "logging.conf"))
+logging.config.fileConfig(os.path.join("util", "face_sdk", "config", "logging.conf"))
 logger = logging.getLogger('sdk')
 
 import numpy as np
 import torch.backends.cudnn as cudnn
 from torch.nn import functional as F
 
-from utils.face_sdk.core.model_handler.BaseModelHandler import BaseModelHandler
-from utils.face_sdk.utils.transform import *
+from util.face_sdk.core.model_handler.BaseModelHandler import BaseModelHandler
+from util.face_sdk.utils.transform import *
 
 pretrain_settings = {
     'lapa/448': {

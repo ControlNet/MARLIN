@@ -5,7 +5,7 @@ from pytorch_lightning.trainer import Trainer
 
 from dataset.youtube_face import YoutubeFaceDataModule
 from marlin_pytorch.util import read_yaml
-from utils.misc import load_official_pretrain_model
+from util.misc import load_official_pretrain_model
 
 parser = argparse.ArgumentParser("MARLIN pretraining")
 parser.add_argument("--config", type=str)

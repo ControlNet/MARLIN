@@ -13,8 +13,8 @@ from numpy import ndarray
 from tqdm.auto import tqdm
 
 from marlin_pytorch.util import crop_with_padding
-from utils.face_sdk.core.model_handler.face_detection.FaceDetModelHandler import FaceDetModelHandler
-from utils.face_sdk.core.model_loader.face_detection.FaceDetModelLoader import FaceDetModelLoader
+from util.face_sdk.core.model_handler.face_detection.FaceDetModelHandler import FaceDetModelHandler
+from util.face_sdk.core.model_loader.face_detection.FaceDetModelLoader import FaceDetModelLoader
 
 logging.config.fileConfig(os.path.join("utils", "face_sdk", "config", "logging.conf"))
 logger = logging.getLogger('api')
