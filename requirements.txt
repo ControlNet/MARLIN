@@ -11,3 +11,4 @@ pillow>=9.2.0
 pandas~=1.4.3
 marlin_pytorch==0.2.0
 pytorch_lightning==1.7.*
+ffmpeg-python>=0.2.0

@@ -1,3 +1,4 @@
+import glob
 import logging.config
 import os
 import sys
@@ -7,8 +8,6 @@ from typing import Tuple
 
 import cv2
 import ffmpeg
-import glob
-
 import yaml
 from numpy import ndarray
 from tqdm.auto import tqdm
@@ -77,7 +76,7 @@ def crop_face_img(img_path: str, save_path: str):
     cv2.imwrite(save_path, face)
 
 
-def process_videos(video_path, output_path, ext="mp4"):
+def process_videos(video_path, output_path, ext="mp4", max_workers=8):
     if ext == "mp4":
         fourcc = cv2.VideoWriter_fourcc(*"mp4v")
     elif ext == "avi":
@@ -86,10 +85,9 @@ def process_videos(video_path, output_path, ext="mp4"):
         raise ValueError("ext should be mp4 or avi")
 
     Path(output_path).mkdir(parents=True, exist_ok=True)
-    Path("watcher").mkdir(parents=True, exist_ok=True)
 
     files = os.listdir(video_path)
-    with ProcessPoolExecutor(max_workers=8) as executor:
+    with ProcessPoolExecutor(max_workers=max_workers) as executor:
         futures = []
 
         for f_name in tqdm(files):
@@ -98,17 +96,16 @@ def process_videos(video_path, output_path, ext="mp4"):
                 target_path = os.path.join(output_path, f_name)
                 fps = eval(ffmpeg.probe(source_path)["streams"][0]["avg_frame_rate"])
                 futures.append(executor.submit(crop_face_video, source_path, target_path, fourcc,
-                                               fps))
+                    fps))
 
         for future in tqdm(futures):
             future.result()
 
 
-def process_images(image_path, output_path):
+def process_images(image_path: str, output_path: str, max_workers: int = 8):
     Path(output_path).mkdir(parents=True, exist_ok=True)
-    Path("watcher").mkdir(parents=True, exist_ok=True)
     files = glob.glob(f"{image_path}/*/*/*.jpg")
-    with ProcessPoolExecutor(max_workers=10) as executor:
+    with ProcessPoolExecutor(max_workers=max_workers) as executor:
         futures = []
 
         for file in tqdm(files):

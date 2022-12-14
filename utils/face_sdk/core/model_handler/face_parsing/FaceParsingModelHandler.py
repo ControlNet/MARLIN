@@ -16,6 +16,7 @@ logger = logging.getLogger('sdk')
 
 import numpy as np
 import torch.backends.cudnn as cudnn
+from torch.nn import functional as F
 
 from utils.face_sdk.core.model_handler.BaseModelHandler import BaseModelHandler
 from utils.face_sdk.utils.transform import *

@@ -1,6 +1,7 @@
 import glob
 import logging.config
 import os.path
+import sys
 from multiprocessing import set_start_method
 from pathlib import Path
 
@@ -23,12 +24,12 @@ mpl_logger.setLevel(logging.WARNING)
 logging.config.fileConfig(os.path.join("utils", "face_sdk", "config", "logging.conf"))
 logger = logging.getLogger('api')
 
-with open('config/model_conf.yaml') as f:
+with open(os.path.join("utils", "face_sdk", "config", "model_conf.yaml")) as f:
     model_conf = yaml.load(f, Loader=yaml.FullLoader)
 
 # common setting for all models, need not modify.
-model_path = 'models'
-
+model_path = os.path.join("utils", "face_sdk", "models")
+sys.path.append(os.path.join("utils", "face_sdk"))
 # face detection model setting.
 scene = 'non-mask'
 model_category = 'face_detection'
@@ -81,14 +82,13 @@ def check_exists(output_path: str):
     return os.path.exists(output_path)
 
 
-def process_images(image_path, output_path):
+def process_images(image_path: str, output_path: str):
     set_start_method("spawn")
 
     Path(output_path).mkdir(parents=True, exist_ok=True)
-    Path("watcher").mkdir(parents=True, exist_ok=True)
     files = glob.glob(f"{image_path}/*/*/*.jpg")
 
-    for i, file in enumerate(tqdm(files[:200])):
+    for i, file in enumerate(tqdm(files)):
         save_path = file.replace(image_path, output_path).replace(".jpg", ".npy")
         Path("/".join(save_path.split("/")[:-1])).mkdir(parents=True, exist_ok=True)
         parse_face_img(file, save_path)

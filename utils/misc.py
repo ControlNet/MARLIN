@@ -1,14 +1,9 @@
 from __future__ import annotations
 
 import re
-from collections import OrderedDict
-from typing import TYPE_CHECKING, List
 
 import torch
 from torch import Tensor
-
-if TYPE_CHECKING:
-    from model.encoder import ViTEncoder
 
 
 def rename_key(dictionary, old_key, new_key):
@@ -49,11 +44,3 @@ def sample_indexes(total_frames: int, n_frames: int, temporal_sample_rate: int) 
         print(f"total_frames: {total_frames}, n_frames: {n_frames}, temporal_sample_rate: {temporal_sample_rate}")
         raise e
     return torch.arange(n_frames) * temporal_sample_rate + start_ind
-
-
-def load_vit_encoder_checkpoint(encoder: ViTEncoder, ckpt: str):
-    encoder_state_dict = OrderedDict({
-        k[8:]: v for k, v in torch.load(ckpt)["state_dict"].items() if k.startswith("encoder.")
-    })
-
-    encoder.load_state_dict(encoder_state_dict, strict=True)

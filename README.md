@@ -155,9 +155,14 @@ Download the [YoutubeFaces](https://www.cs.tau.ac.il/~wolf/ytfaces/) dataset (on
 Download the face parsing model from [face_parsing.farl.lapa](https://github.com/FacePerceiver/facer/releases/download/models-v1/face_parsing.farl.lapa.main_ema_136500_jit191.pt)
 and put it in `utils/face_sdk/models/face_parsing/face_parsing_1.0`.
 
+Download the VideoMAE pretrained [checkpoint](https://github.com/ControlNet/MARLIN/releases/download/misc/checkpoint.pth) 
+for initializing the weights. (ps. They updated their models in this 
+[commit](https://github.com/MCG-NJU/VideoMAE/commit/2b56a75d166c619f71019e3d1bb1c4aedafe7a90), but we are using the 
+old models which are not shared anymore by the authors. So we uploaded this model by ourselves.)
+
 Then run scripts to process the dataset:
 ```bash
-python preprocess/ytf_preprocess.py --data_dir /path/to/youtube_faces
+python preprocess/ytf_preprocess.py --data_dir /path/to/youtube_faces --max_workers 8
 ```
 After processing, the directory structure should be like this:
 ```
@@ -180,8 +185,24 @@ After processing, the directory structure should be like this:
 │   │   ├── Aaron_Eckhart
 │   │   │   ├── 0
 │   │   │   │   ├── 0.555.npy
+│   │   │   │   ├── ...
+│   │   │   ├── ...
+│   │   ├── ...
+│   ├── train_set.csv
+│   ├── val_set.csv
 ```
 
+Then, run the training script:
+```bash
+python train.py \
+    --config config/pretrain/marlin.default.yaml \
+    --data_dir /path/to/youtube_faces \
+    --n_gpus 4 \
+    --num_workers 8 \
+    --batch_size 16 \
+    --epochs 2000 \
+    --official_pretrained /path/to/videomae/pretrained.pth
+```
 
 ## References
 If you find this work useful in your research, please cite it.

@@ -9,7 +9,7 @@ from utils.misc import load_official_pretrain_model
 
 parser = argparse.ArgumentParser("MARLIN pretraining")
 parser.add_argument("--config", type=str)
-parser.add_argument("--data_path", type=str)
+parser.add_argument("--data_dir", type=str)
 parser.add_argument("--n_gpus", type=int, default=1)
 parser.add_argument("--num_workers", type=int, default=8)
 parser.add_argument("--batch_size", type=int, default=16)
@@ -20,7 +20,7 @@ parser.add_argument("--resume", type=str, default=None)
 if __name__ == '__main__':
     args = parser.parse_args()
     config_path = args.config
-    data_path = args.data_path
+    data_path = args.data_dir
     resume_ckpt = args.resume
     config = read_yaml(config_path)
 
