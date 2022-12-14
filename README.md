@@ -150,7 +150,7 @@ pip install -r requirements.txt
 
 ### MARLIN Pretraining
 
-Download the [YoutubeFaces](https://www.cs.tau.ac.il/~wolf/ytfaces/) dataset. 
+Download the [YoutubeFaces](https://www.cs.tau.ac.il/~wolf/ytfaces/) dataset (only `frame_images_DB` is required). 
 
 Download the face parsing model from [face_parsing.farl.lapa](https://github.com/FacePerceiver/facer/releases/download/models-v1/face_parsing.farl.lapa.main_ema_136500_jit191.pt)
 and put it in `utils/face_sdk/models/face_parsing/face_parsing_1.0`.

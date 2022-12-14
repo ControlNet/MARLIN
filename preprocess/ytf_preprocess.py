@@ -1,6 +1,7 @@
 import os.path
 import sys
 import argparse
+import shutil
 
 sys.path.append(os.path.join(__file__, "..", "utils", "face_sdk"))
 parser = argparse.ArgumentParser("Preprocess YTF dataset")
@@ -9,6 +10,10 @@ parser.add_argument("--data_dir", type=str)
 if __name__ == '__main__':
 
     args = parser.parse_args()
+
+    # copy the metadata (split) to the data_dir
+    shutil.copy(os.path.join(__file__, "..", "dataset", "misc", "youtube_face", "train_set.csv"), args.data_dir)
+    shutil.copy(os.path.join(__file__, "..", "dataset", "misc", "youtube_face", "val_set.csv"), args.data_dir)
 
     # Crop faces from videos
 
