@@ -10,9 +10,9 @@ from .positional_embedding import SinCosPositionalEmbedding
 class MarlinDecoder(nn.Module):
 
     def __init__(self, img_size=224, patch_size=16, n_frames=16, embed_dim=384, depth=8,
-                 num_heads=6, mlp_ratio=4., qkv_bias=False, qk_scale=None, drop_rate=0., attn_drop_rate=0.,
-                 norm_layer="LayerNorm", init_values=1., tubelet_size=2
-                 ):
+        num_heads=6, mlp_ratio=4., qkv_bias=False, qk_scale=None, drop_rate=0., attn_drop_rate=0.,
+        norm_layer="LayerNorm", init_values=1., tubelet_size=2
+    ):
         super().__init__()
         output_dim = 3 * tubelet_size * patch_size * patch_size
         self.patch_size = patch_size
@@ -57,7 +57,7 @@ class MarlinDecoder(nn.Module):
         x = rearrange(x, "b n (c p) -> b n p c", c=3)
         # x: (Batch, No. batches, Prod of cube size, C)
         x = rearrange(x, "b (t h w) (p0 p1 p2) c -> b c (t p0) (h p1) (w p2)", p0=self.tubelet_size,
-                      p1=self.patch_size, p2=self.patch_size, h=self.n_patch_h, w=self.n_patch_w)
+            p1=self.patch_size, p2=self.patch_size, h=self.n_patch_h, w=self.n_patch_w)
         # x: (B, C, T, H, W)
         return x
 

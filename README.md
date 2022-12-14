@@ -39,13 +39,47 @@
 This repo is the official PyTorch implementation for the paper 
 [MARLIN: Masked Autoencoder for facial video Representation LearnINg](https://arxiv.org/abs/2211.06627).
 
-## Requirements
+## Repository Structure
 
+The repository contains 2 parts:
+ - `marlin-pytorch`: The PyPI package for MARLIN used for inference.
+ - The implementation for the paper including training and evaluation scripts.
+
+```
+.
+├── assets                # Images for README.md
+├── LICENSE
+├── README.md
+├── CITATION.cff
+├── .gitignore
+├── .github
+
+# below is for the PyPI package marlin-pytorch
+├── src                   # Source code for marlin-pytorch
+├── tests                 # Unittest
+├── requirements.lib.txt
+├── setup.py
+├── init.py
+├── version.txt
+
+# below is for the paper implementation
+├── configs              # Configs for experiments settings
+├── model                # Marlin models
+├── preprocess           # Preprocessing scripts
+├── dataset              # Dataloaders
+├── utils                # Utility functions
+├── train.py             # Training script
+├── eval.py              # Evaluation script
+
+```
+
+## Use `marlin-pytorch` for Feature Extraction
+
+Requirements:
 - Python >= 3.6, < 3.11
 - PyTorch >= 1.8
 - ffmpeg
 
-## Getting Started
 
 Install from PyPI:
 ```bash
@@ -64,6 +98,8 @@ Load MARLIN model from file
 from marlin_pytorch import Marlin
 # Load MARLIN model from local file
 model = Marlin.from_file("path/to/marlin.pt")
+# Load MARLIN model from the ckpt file trained by the scripts in this repo
+model = Marlin.from_ckpt("path/to/marlin.ckpt")
 ```
 
 When MARLIN model is retrieved from GitHub Release, it will be cached in `.marlin`. You can remove marlin cache by
@@ -94,6 +130,59 @@ features = model.extract_features(x)  # torch.Size([B, 1568, 768])
 features = model.extract_features(x, keep_seq=False)  # torch.Size([B, 768])
 ```
 
+## Paper Implementation
+
+### Requirements
+- Python >= 3.7, < 3.11
+- PyTorch ~= 1.11
+- Torchvision ~= 0.12
+
+### Installation
+
+Firstly, make sure you have installed PyTorch and Torchvision with or without CUDA. 
+
+Clone the repo and install the requirements:
+```bash
+git clone https://github.com/ControlNet/MARLIN.git
+cd MARLIN
+pip install -r requirements.txt
+```
+
+### MARLIN Pretraining
+
+Download the [YoutubeFaces](https://www.cs.tau.ac.il/~wolf/ytfaces/) dataset. 
+
+Download the face parsing model from [face_parsing.farl.lapa](https://github.com/FacePerceiver/facer/releases/download/models-v1/face_parsing.farl.lapa.main_ema_136500_jit191.pt)
+and put it in `utils/face_sdk/models/face_parsing/face_parsing_1.0`.
+
+Then run scripts to process the dataset:
+```bash
+python preprocess/ytf_preprocess.py --data_dir /path/to/youtube_faces
+```
+After processing, the directory structure should be like this:
+```
+├── YoutubeFaces
+│   ├── frame_images_DB
+│   │   ├── Aaron_Eckhart
+│   │   │   ├── 0
+│   │   │   │   ├── 0.555.jpg
+│   │   │   │   ├── ...
+│   │   │   ├── ...
+│   │   ├── ...
+│   ├── crop_images_DB
+│   │   ├── Aaron_Eckhart
+│   │   │   ├── 0
+│   │   │   │   ├── 0.555.jpg
+│   │   │   │   ├── ...
+│   │   │   ├── ...
+│   │   ├── ...
+│   ├── face_parsing_images_DB
+│   │   ├── Aaron_Eckhart
+│   │   │   ├── 0
+│   │   │   │   ├── 0.555.npy
+```
+
+
 ## References
 If you find this work useful in your research, please cite it.
 ```bibtex
@@ -104,3 +193,8 @@ If you find this work useful in your research, please cite it.
   year = {2022},
 }
 ```
+
+## Acknowledgements
+
+Some code about model is based on [MCG-NJU/VideoMAE](https://github.com/MCG-NJU/VideoMAE). The code related to preprocessing
+is borrowed from [JDAI-CV/FaceX-Zoo](https://github.com/JDAI-CV/FaceX-Zoo).
