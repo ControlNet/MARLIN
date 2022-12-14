@@ -16,14 +16,14 @@ from marlin_pytorch.util import crop_with_padding
 from util.face_sdk.core.model_handler.face_detection.FaceDetModelHandler import FaceDetModelHandler
 from util.face_sdk.core.model_loader.face_detection.FaceDetModelLoader import FaceDetModelLoader
 
-logging.config.fileConfig(os.path.join("utils", "face_sdk", "config", "logging.conf"))
+logging.config.fileConfig(os.path.join("util", "face_sdk", "config", "logging.conf"))
 logger = logging.getLogger('api')
 
-with open(os.path.join("utils", "face_sdk", "config", "model_conf.yaml")) as f:
+with open(os.path.join("util", "face_sdk", "config", "model_conf.yaml")) as f:
     model_conf = yaml.load(f, Loader=yaml.FullLoader)
 
 # common setting for all model, need not modify.
-model_path = os.path.join("utils", "face_sdk", 'models')
+model_path = os.path.join("util", "face_sdk", 'models')
 
 # model setting, modified along with model
 scene = 'non-mask'
@@ -32,7 +32,7 @@ model_name = model_conf[scene][model_category]
 
 logger.info('Start to load the face detection model...')
 # load model
-sys.path.append(os.path.join("utils", "face_sdk"))
+sys.path.append(os.path.join("util", "face_sdk"))
 faceDetModelLoader = FaceDetModelLoader(model_path, model_category, model_name)
 model, cfg = faceDetModelLoader.load_model()
 faceDetModelHandler = FaceDetModelHandler(model, 'cuda:0', cfg)

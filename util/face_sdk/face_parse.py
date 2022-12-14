@@ -21,15 +21,15 @@ from util.face_sdk.core.model_loader.face_parsing.FaceParsingModelLoader import 
 mpl_logger = logging.getLogger('matplotlib')
 mpl_logger.setLevel(logging.WARNING)
 
-logging.config.fileConfig(os.path.join("utils", "face_sdk", "config", "logging.conf"))
+logging.config.fileConfig(os.path.join("util", "face_sdk", "config", "logging.conf"))
 logger = logging.getLogger('api')
 
-with open(os.path.join("utils", "face_sdk", "config", "model_conf.yaml")) as f:
+with open(os.path.join("util", "face_sdk", "config", "model_conf.yaml")) as f:
     model_conf = yaml.load(f, Loader=yaml.FullLoader)
 
 # common setting for all models, need not modify.
-model_path = os.path.join("utils", "face_sdk", "models")
-sys.path.append(os.path.join("utils", "face_sdk"))
+model_path = os.path.join("util", "face_sdk", "models")
+sys.path.append(os.path.join("util", "face_sdk"))
 # face detection model setting.
 scene = 'non-mask'
 model_category = 'face_detection'
