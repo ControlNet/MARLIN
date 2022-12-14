@@ -69,7 +69,7 @@ The repository contains 2 parts:
 ├── dataset              # Dataloaders
 ├── utils                # Utility functions
 ├── train.py             # Training script
-├── eval.py              # Evaluation script
+├── evaluate.py          # Evaluation script
 
 ```
 

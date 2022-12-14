@@ -72,5 +72,9 @@ jobs:
       - name: Set PYTHONPATH
         run: echo "PYTHONPATH=$(pwd)/src" >> $GITHUB_ENV
 
+      - name: Remove unnecessary folders for test
+        run: |
+          rm -rf utils
+
       - name: Run Test
         run: python -m unittest discover test
