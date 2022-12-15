@@ -83,8 +83,6 @@ def check_exists(output_path: str):
 
 
 def process_images(image_path: str, output_path: str):
-    set_start_method("spawn")
-
     Path(output_path).mkdir(parents=True, exist_ok=True)
     files = glob.glob(f"{image_path}/*/*/*.jpg")
 
