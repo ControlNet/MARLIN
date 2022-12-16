@@ -201,8 +201,10 @@ python train.py \
     --num_workers 8 \
     --batch_size 16 \
     --epochs 2000 \
-    --official_pretrained /path/to/videomae/pretrained.pth
+    --official_pretrained /path/to/videomae/checkpoint.pth
 ```
+
+After trained, you can load the checkpoint for inference by `marlin_pytorch.Marlin.from_file`.
 
 ## References
 If you find this work useful in your research, please cite it.

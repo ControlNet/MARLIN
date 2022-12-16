@@ -115,6 +115,7 @@ if __name__ == '__main__':
         max_epochs=max_epochs,
         iter_per_epoch=len(dm.train_dataloader()),
         distributed=n_gpus > 1,
+        name=model_name
     )
 
     if adv_loss:
@@ -131,7 +132,7 @@ if __name__ == '__main__':
     n_gpus = n_gpus if n_gpus > 0 else None
 
     trainer = Trainer(log_every_n_steps=1, devices=n_gpus, accelerator=device,
-        logger=model.name, precision=32, max_epochs=max_epochs,
+        logger=True, precision=32, max_epochs=max_epochs,
         strategy=accelerator, resume_from_checkpoint=resume_ckpt,
         callbacks=[ModelCheckpoint(dirpath=f"ckpt/{model_name}", save_last=True,
             filename=model.name + "-{epoch}-{val_loss:.3f}",

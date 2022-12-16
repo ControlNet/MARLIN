@@ -51,6 +51,7 @@ class Marlin(LightningModule):
         g_steps: int = 1,
         adv_weight: float = 0.1,
         gp_weight: float = 10.,
+        name: str = None
     ):
         super().__init__()
         self.save_hyperparameters()
@@ -122,6 +123,7 @@ class Marlin(LightningModule):
         self.loss_fn = MSELoss()
         self.automatic_optimization = False
         self.distributed = distributed
+        self.name = name
 
     def forward(self, x, mask):
         x = self.encoder(x, mask)
@@ -333,3 +335,10 @@ class Marlin(LightningModule):
         )
 
         return [g_optimizer, d_optimizer], [g_lr_scheduler, d_lr_scheduler]
+
+    def log_image(self, name: str, image: torch.Tensor) -> None:
+        """Log an image to the logger"""
+        if self.logger is None:
+            return
+
+        self.logger.experiment.add_image(name, torch.clip(image, 0, 1), self.trainer.global_step)
