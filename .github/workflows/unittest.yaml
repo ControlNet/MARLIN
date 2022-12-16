@@ -60,7 +60,7 @@ jobs:
           sudo apt install -y ffmpeg wget
           pip install torch==${{ matrix.torch-version }}
           pip install torchvision==${{ matrix.torchvision-version }}
-          pip install -r requirements.txt
+          pip install -r requirements.lib.txt
           python init.py
 
       - name: Download model checkpoints

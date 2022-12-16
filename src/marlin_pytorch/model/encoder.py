@@ -8,8 +8,9 @@ from .positional_embedding import SinCosPositionalEmbedding
 class MarlinEncoder(nn.Module):
 
     def __init__(self, img_size=224, patch_size=16, n_frames=16, embed_dim=768, depth=12,
-                 num_heads=12, mlp_ratio=4., qkv_bias=False, qk_scale=None, drop_rate=0., attn_drop_rate=0.,
-                 norm_layer="LayerNorm", init_values=0., tubelet_size=2):
+        num_heads=12, mlp_ratio=4., qkv_bias=False, qk_scale=None, drop_rate=0., attn_drop_rate=0.,
+        norm_layer="LayerNorm", init_values=0., tubelet_size=2
+    ):
         super().__init__()
 
         self.embed_dim = embed_dim

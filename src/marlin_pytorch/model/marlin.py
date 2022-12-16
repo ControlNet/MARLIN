@@ -191,7 +191,16 @@ class Marlin(Module):
 
     @classmethod
     def from_file(cls, pt_path: str) -> "Marlin":
-        state_dict = torch.load(pt_path, map_location="cpu")
+        if pt_path.endswith(".pt"):
+            state_dict = torch.load(pt_path, map_location="cpu")
+        elif pt_path.endswith(".ckpt"):
+            state_dict = torch.load(pt_path, map_location="cpu")["state_dict"]
+
+            discriminator_keys = [k for k in state_dict.keys() if k.startswith("discriminator")]
+            for key in discriminator_keys:
+                del state_dict[key]
+        else:
+            raise ValueError(f"Unsupported file type: {pt_path.split('.')[-1]}")
         # determine if the checkpoint is full model or encoder only.
         for key in state_dict.keys():
             if key.startswith("decoder."):

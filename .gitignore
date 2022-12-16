@@ -262,4 +262,11 @@ scratch*.ipynb
 /src/marlin_pytorch/version.txt
 marlin.encoder.pt
 marlin.full.pt
+marlin.ckpt
 .marlin
+face_parsing.farl.lapa.main_ema_136500_jit191.pt
+logs
+*.pth
+*.ckpt
+*.pt
+lightning_logs
