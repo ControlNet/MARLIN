@@ -70,6 +70,7 @@ The repository contains 2 parts:
 ├── utils                # Utility functions
 ├── train.py             # Training script
 ├── evaluate.py          # Evaluation script
+├── requirements.txt
 
 ```
 
