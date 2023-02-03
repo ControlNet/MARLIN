@@ -12,6 +12,8 @@ import torch
 from einops import rearrange
 from torch import Tensor
 from torch.nn import Linear, Module
+
+from ..config import resolve_config, Downloadable
 from ..face_detector import FaceXZooFaceDetector
 
 from .decoder import MarlinDecoder
@@ -20,28 +22,25 @@ from ..util import read_video, padding_video, DownloadProgressBar
 
 
 class Marlin(Module):
-    MARLIN_FULL_URL = "https://github.com/ControlNet/MARLIN/releases/download/model_v1/marlin.full.pt"
-    MARLIN_ENCODER_URL = "https://github.com/ControlNet/MARLIN/releases/download/model_v1/marlin.encoder.pt"
-
     def __init__(self,
-        img_size=224,
-        patch_size=16,
-        n_frames=16,
-        encoder_embed_dim=768,
-        encoder_depth=12,
-        encoder_num_heads=12,
-        decoder_embed_dim=384,
-        decoder_depth=4,
-        decoder_num_heads=6,
-        mlp_ratio=4.,
-        qkv_bias=True,
-        qk_scale=None,
-        drop_rate=0.,
-        attn_drop_rate=0.,
-        norm_layer="LayerNorm",
-        init_values=0.,
-        tubelet_size=2,
-        as_feature_extractor=True,
+        img_size: int,
+        patch_size: int,
+        n_frames: int,
+        encoder_embed_dim: int,
+        encoder_depth: int,
+        encoder_num_heads: int,
+        decoder_embed_dim: int,
+        decoder_depth: int,
+        decoder_num_heads: int,
+        mlp_ratio: float,
+        qkv_bias: bool,
+        qk_scale: Optional[float],
+        drop_rate: float,
+        attn_drop_rate: float,
+        norm_layer: str,
+        init_values: float,
+        tubelet_size: int,
+        as_feature_extractor: bool = True,
     ):
         super().__init__()
         self.encoder = MarlinEncoder(
@@ -98,11 +97,13 @@ class Marlin(Module):
     def device(self):
         return self.encoder.norm.weight.device
 
-    @torch.no_grad()
     def extract_features(self, x: Tensor, keep_seq: bool = True):
         """Extract features for one video clip (v)"""
-        self.eval()
-        return self.encoder.extract_features(x, seq_mean_pool=not keep_seq)
+        if self.training:
+            return self.encoder.extract_features(x, seq_mean_pool=not keep_seq)
+        else:
+            with torch.no_grad():
+                return self.encoder.extract_features(x, seq_mean_pool=not keep_seq)
 
     def _crop_face(self, v: Tensor) -> Tensor:
         # use face sdk to crop face
@@ -190,17 +191,17 @@ class Marlin(Module):
             cap.release()
 
     @classmethod
-    def from_file(cls, pt_path: str) -> "Marlin":
-        if pt_path.endswith(".pt"):
-            state_dict = torch.load(pt_path, map_location="cpu")
-        elif pt_path.endswith(".ckpt"):
-            state_dict = torch.load(pt_path, map_location="cpu")["state_dict"]
+    def from_file(cls, model_name: str, path: str) -> "Marlin":
+        if path.endswith(".pt"):
+            state_dict = torch.load(path, map_location="cpu")
+        elif path.endswith(".ckpt"):
+            state_dict = torch.load(path, map_location="cpu")["state_dict"]
 
             discriminator_keys = [k for k in state_dict.keys() if k.startswith("discriminator")]
             for key in discriminator_keys:
                 del state_dict[key]
         else:
-            raise ValueError(f"Unsupported file type: {pt_path.split('.')[-1]}")
+            raise ValueError(f"Unsupported file type: {path.split('.')[-1]}")
         # determine if the checkpoint is full model or encoder only.
         for key in state_dict.keys():
             if key.startswith("decoder."):
@@ -208,20 +209,45 @@ class Marlin(Module):
                 break
         else:
             as_feature_extractor = True
-        model = cls(as_feature_extractor=as_feature_extractor)
+
+        config = resolve_config(model_name)
+        model = cls(
+            img_size=config.img_size,
+            patch_size=config.patch_size,
+            n_frames=config.n_frames,
+            encoder_embed_dim=config.encoder_embed_dim,
+            encoder_depth=config.encoder_depth,
+            encoder_num_heads=config.encoder_num_heads,
+            decoder_embed_dim=config.decoder_embed_dim,
+            decoder_depth=config.decoder_depth,
+            decoder_num_heads=config.decoder_num_heads,
+            mlp_ratio=config.mlp_ratio,
+            qkv_bias=config.qkv_bias,
+            qk_scale=config.qk_scale,
+            drop_rate=config.drop_rate,
+            attn_drop_rate=config.attn_drop_rate,
+            norm_layer=config.norm_layer,
+            init_values=config.init_values,
+            tubelet_size=config.tubelet_size,
+            as_feature_extractor=as_feature_extractor
+        )
         model.load_state_dict(state_dict)
         return model
 
     @classmethod
-    def from_online(cls, full_model: bool = False) -> "Marlin":
-        url = cls.MARLIN_FULL_URL if full_model else cls.MARLIN_ENCODER_URL
+    def from_online(cls, model_name: str, full_model: bool = False) -> "Marlin":
+        config = resolve_config(model_name)
+        if not isinstance(config, Downloadable):
+            raise ValueError(f"Model {model_name} is not downloadable.")
+
+        url = config.full_model_url if full_model else config.encoder_model_url
         path = Path(".marlin")
         path.mkdir(exist_ok=True)
-        file = path / url.split("/")[-1]
+        file = path / f"{model_name}.{'full' if full_model else 'encoder'}.pt"
         if not file.exists():
             with DownloadProgressBar(unit="B", unit_scale=True, miniters=1, desc="Downloading Marlin model") as pb:
                 urlretrieve(url, filename=file, reporthook=pb.update_to)
-        return cls.from_file(str(file))
+        return cls.from_file(model_name, str(file))
 
     @classmethod
     def clean_cache(cls, verbose: bool = True) -> None:
