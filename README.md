@@ -32,8 +32,8 @@
     </a>
     <a href="https://www.python.org/"><img src="https://img.shields.io/pypi/pyversions/marlin-pytorch?style=flat-square"></a>
     <a href="https://pytorch.org/"><img src="https://img.shields.io/badge/PyTorch-%3E%3D1.8.0-EE4C2C?style=flat-square&logo=pytorch"></a>
-    <a href="https://github.com/ControlNet/MARLIN/actions"><img src="https://img.shields.io/github/workflow/status/ControlNet/MARLIN/Unittest/dev?label=unittest&style=flat-square"></a>
-    <a href="https://github.com/ControlNet/MARLIN/actions"><img src="https://img.shields.io/github/workflow/status/ControlNet/MARLIN/Release/master?label=release&style=flat-square"></a>
+    <a href="https://github.com/ControlNet/MARLIN/actions"><img src="https://img.shields.io/github/actions/workflow/status/ControlNet/MARLIN/unittest.yaml?branch=dev&label=release&style=flat-square"></a>
+    <a href="https://github.com/ControlNet/MARLIN/actions"><img src="https://img.shields.io/github/actions/workflow/status/ControlNet/MARLIN/release.yaml?branch=master&label=release&style=flat-square"></a>
 </div>
 
 This repo is the official PyTorch implementation for the paper 
@@ -70,6 +70,7 @@ The repository contains 2 parts:
 ├── utils                # Utility functions
 ├── train.py             # Training script
 ├── evaluate.py          # Evaluation script
+├── requirements.txt
 
 ```
 
