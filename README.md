@@ -50,6 +50,7 @@ The repository contains 2 parts:
 ├── assets                # Images for README.md
 ├── LICENSE
 ├── README.md
+├── MODEL_ZOO.md
 ├── CITATION.cff
 ├── .gitignore
 ├── .github
@@ -69,7 +70,7 @@ The repository contains 2 parts:
 ├── dataset              # Dataloaders
 ├── utils                # Utility functions
 ├── train.py             # Training script
-├── evaluate.py          # Evaluation script
+├── evaluate.py          # Evaluation script (TODO)
 ├── requirements.txt
 
 ```
@@ -91,17 +92,24 @@ Load MARLIN model from online
 ```python
 from marlin_pytorch import Marlin
 # Load MARLIN model from GitHub Release
-model = Marlin.from_online()
+model = Marlin.from_online("marlin_vit_base_ytf")
 ```
 
 Load MARLIN model from file
 ```python
 from marlin_pytorch import Marlin
 # Load MARLIN model from local file
-model = Marlin.from_file("path/to/marlin.pt")
+model = Marlin.from_file("marlin_vit_base_ytf", "path/to/marlin.pt")
 # Load MARLIN model from the ckpt file trained by the scripts in this repo
-model = Marlin.from_ckpt("path/to/marlin.ckpt")
+model = Marlin.from_ckpt("marlin_vit_base_ytf", "path/to/marlin.ckpt")
 ```
+
+Current model name list:
+- `marlin_vit_small_ytf`: ViT-small encoder trained on YTF dataset. Embedding 384 dim.
+- `marlin_vit_base_ytf`: ViT-base encoder trained on YTF dataset. Embedding 768 dim.
+- `marlin_vit_large_ytf`: ViT-large encoder trained on YTF dataset. Embedding 1024 dim.
+
+For more details, see [MODEL_ZOO.md](MODEL_ZOO.md).
 
 When MARLIN model is retrieved from GitHub Release, it will be cached in `.marlin`. You can remove marlin cache by
 ```python
@@ -196,7 +204,7 @@ After processing, the directory structure should be like this:
 Then, run the training script:
 ```bash
 python train.py \
-    --config config/pretrain/marlin.default.yaml \
+    --config config/pretrain/marlin_vit_base.yaml \
     --data_dir /path/to/youtube_faces \
     --n_gpus 4 \
     --num_workers 8 \
@@ -205,7 +213,15 @@ python train.py \
     --official_pretrained /path/to/videomae/checkpoint.pth
 ```
 
-After trained, you can load the checkpoint for inference by `marlin_pytorch.Marlin.from_file`.
+After trained, you can load the checkpoint for inference by
+
+```python
+from marlin_pytorch import Marlin
+from marlin_pytorch.config import register_model_from_yaml
+
+register_model_from_yaml("my_marlin_model", "path/to/config.yaml")
+model = Marlin.from_ckpt("my_marlin_model", "path/to/marlin.ckpt")
+```
 
 ## References
 If you find this work useful in your research, please cite it.

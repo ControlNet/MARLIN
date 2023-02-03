@@ -1,9 +1,9 @@
-model_name: "marlin_default"
+model_name: "marlin_vit_base"
 img_size: 224
 patch_size: 16
 clip_frames: 16
 tubelet_size: 2
-mask_strategy: "face"
+mask_strategy: "fasking"
 temporal_sample_rate: 2
 mask_percentage_target: 0.9
 mlp_ratio: 4.0
@@ -14,7 +14,7 @@ attn_drop_rate: 0.0
 norm_layer: "LayerNorm"
 init_values: 0.0
 weight_decay: 0.0
-feature_dir: "Marlin_Features"
+feature_dir: "Marlin_Features_Vit_Base"
 adv_loss: true
 adv_weight: 0.01
 gp_weight: 0.0

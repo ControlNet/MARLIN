@@ -1,0 +1,43 @@
+model_name: "marlin_vit_large"
+img_size: 224
+patch_size: 16
+clip_frames: 16
+tubelet_size: 2
+mask_strategy: "fasking"
+temporal_sample_rate: 2
+mask_percentage_target: 0.9
+mlp_ratio: 4.0
+qkv_bias: true
+qk_scale: null
+drop_rate: 0.0
+attn_drop_rate: 0.0
+norm_layer: "LayerNorm"
+init_values: 0.0
+weight_decay: 0.0
+feature_dir: "Marlin_Features_Vit_Large"
+adv_loss: true
+adv_weight: 0.01
+gp_weight: 0.0
+d_steps: 1
+g_steps: 1
+
+learning_rate:
+  base: 1.5e-4
+  warmup: 1.0e-6
+  min: 1.0e-5
+  warmup_epochs: 40
+
+optimizer:
+  type: "AdamW"
+  eps: 1.0e-8
+  betas: [0.9, 0.95]
+
+encoder:
+  embed_dim: 1024
+  depth: 24
+  num_heads: 16
+
+decoder:
+  embed_dim: 512
+  depth: 12
+  num_heads: 8

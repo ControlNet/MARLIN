@@ -1,4 +1,5 @@
 import os
+from math import ceil
 from typing import Collection, Optional
 
 import cv2
@@ -33,7 +34,7 @@ class YoutubeFace(Dataset):
         patch_size: int,  # 16
         tubelet_size: int,  # 2
         mask_percentage_target: float = 0.8,  # 0.9
-        mask_strategy: str = "face",
+        mask_strategy: str = "fasking",
         take_num: Optional[int] = None
     ):
         self.img_size = 224
@@ -48,18 +49,19 @@ class YoutubeFace(Dataset):
 
         self.patch_masking = True
 
-        if mask_strategy == "face":  # Masking components first
+        if mask_strategy == "fasking":  # Masking components first
             self.face_strategy = True
             self.face_masking_opposite = False
-        elif mask_strategy == "face_opp":  # Masking background and skin first
+        elif mask_strategy == "fasking_opp":  # Masking background and skin first
             self.face_strategy = True
             self.face_masking_opposite = True
-        elif mask_strategy == "random":
+        elif mask_strategy in ("random", "tube", "frame"):  # Masking strategy from VideoMAE
             self.face_strategy = False
             self.face_masking_opposite = None
         else:
-            raise ValueError("mask_strategy must be one of 'face', 'face_opp' or 'random'")
+            raise ValueError("mask_strategy must be one of 'fasking', 'fasking_opp', 'random', 'tube' and 'frame'")
 
+        self.mask_strategy = mask_strategy
         self.metadata = pd.read_csv(os.path.join(root_dir, f"{split}_set.csv"))
         if take_num:
             self.metadata = self.metadata.iloc[:take_num]
@@ -71,8 +73,11 @@ class YoutubeFace(Dataset):
         assert len(indexes) == self.clip_frames
 
         video = torch.zeros(self.clip_frames, self.img_size, self.img_size, 3, dtype=torch.float32)
-        masks = torch.zeros(self.clip_frames // self.tubelet_size,
-            self.mask_unit_num, self.mask_unit_num, dtype=torch.float32)
+        if self.patch_masking:
+            masks = torch.zeros(self.clip_frames // self.tubelet_size,
+                self.mask_unit_num, self.mask_unit_num, dtype=torch.float32)
+        else:
+            masks = torch.zeros(self.clip_frames, self.img_size, self.img_size, dtype=torch.float32)
 
         if self.face_strategy:
             if self.face_masking_opposite:
@@ -89,7 +94,25 @@ class YoutubeFace(Dataset):
                 mask = self.gen_mask(meta.path, files[indexes[i]].replace(".jpg", ".npy"), keep_queue)
                 masks[i // self.tubelet_size] = mask
 
-        masks = masks.flatten().bool()
+        if self.mask_strategy == "tube":
+            first_mask = masks[0].flatten().bool()
+            target_visible_num = ceil(len(first_mask) * self.mask_percentage_target)
+            visible_indexes = first_mask.nonzero().flatten()
+            extra_indexes = np.random.choice(visible_indexes, len(visible_indexes) - target_visible_num,
+                replace=False)
+            first_mask[extra_indexes] = False
+            masks = first_mask.repeat(self.clip_frames // self.tubelet_size)
+        elif self.mask_strategy == "frame":
+            frame_mask = torch.ones(self.clip_frames // self.tubelet_size)
+            target_visible_num = ceil(len(frame_mask) * self.mask_percentage_target)
+            visible_indexes = frame_mask.nonzero().flatten()
+            extra_indexes = np.random.choice(visible_indexes, len(visible_indexes) - target_visible_num,
+                replace=False)
+            frame_mask[extra_indexes] = 0.0
+            masks = rearrange(frame_mask, "t -> t 1 1").expand_as(masks).flatten().bool()
+
+        else:
+            masks = masks.flatten().bool()
 
         # normalize the masking to strictly target percentage for batch computation.
         target_visible_num = int(len(masks) * self.mask_percentage_target)
