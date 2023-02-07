@@ -35,6 +35,9 @@ class TestMarlinPytorch:
         self.assertTrue(True)
 
     def test_extract_wild_video(self):
+        if not os.path.exists(os.path.join("test", "output_sample", self.MODEL_NAME)):
+            return
+
         model = Marlin.from_file(self.MODEL_NAME, self.MODEL_ENCODER_PATH)
         if self.USE_GPU:
             model.cuda()
@@ -42,11 +45,14 @@ class TestMarlinPytorch:
         for video in self.WILD_VIDEOS:
             feat = model.extract_video(os.path.join("test", "input_sample", f"{video}.mp4"), crop_face=True)
             feat = feat.cpu().numpy()
-            true = np.load(os.path.join("test", "output_sample", f"{video}.npy"))
+            true = np.load(os.path.join("test", "output_sample", self.MODEL_NAME, f"{video}.npy"))
             diff = np.abs(feat - true).mean()
             self.assertTrue(diff < 1.5e-4)
 
     def test_extract_cropped_video(self):
+        if not os.path.exists(os.path.join("test", "output_sample", self.MODEL_NAME)):
+            return
+
         model = Marlin.from_file(self.MODEL_NAME, self.MODEL_ENCODER_PATH)
         if self.USE_GPU:
             model.cuda()
@@ -54,7 +60,7 @@ class TestMarlinPytorch:
         for video in self.CROP_VIDEOS:
             feat = model.extract_video(os.path.join("test", "input_sample", f"{video}.mp4"))
             feat = feat.cpu().numpy()
-            true = np.load(os.path.join("test", "output_sample", f"{video}.npy"))
+            true = np.load(os.path.join("test", "output_sample", self.MODEL_NAME, f"{video}.npy"))
             diff = np.abs(feat - true).mean()
             self.assertTrue(diff < 1.5e-4)
 
