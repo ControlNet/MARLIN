@@ -1,15 +1,14 @@
-import unittest
-from typing import Optional
+import os
+from typing import Optional, Callable
 
 import numpy as np
 import torch.cuda
 
 from marlin_pytorch import Marlin
-import os
 
 
-class TestMarlinPytorch(unittest.TestCase):
-    __test__ = False
+class TestMarlinPytorch:
+    assertTrue: Callable
     CROP_VIDEOS = [f"cropped{str(i).zfill(2)}" for i in range(1, 6)]
     WILD_VIDEOS = [f"video{str(i).zfill(2)}" for i in range(1, 6)]
     USE_GPU = torch.cuda.is_available()
@@ -78,27 +77,3 @@ class TestMarlinPytorch(unittest.TestCase):
         x = torch.rand(1, 3, 16, 224, 224).to(model.device)
         pred = model(x, mask)
         self.assertTrue(pred.shape == (1, 1176, 1536))
-
-
-class MarlinViTBase(TestMarlinPytorch):
-    __test__ = True
-    MODEL_NAME: Optional[str] = "marlin_vit_base_ytf"
-    MODEL_ENCODER_PATH: Optional[str] = os.path.join("test", "model", f"marlin_vit_base_ytf.encoder.pt")
-    MODEL_FULL_PATH: Optional[str] = os.path.join("test", "model", "marlin_vit_base_ytf.full.pt")
-    EMBEDDING_SIZE: Optional[int] = 768
-
-
-class MarlinViTLarge(TestMarlinPytorch):
-    __test__ = True
-    MODEL_NAME: Optional[str] = "marlin_vit_large_ytf"
-    MODEL_ENCODER_PATH: Optional[str] = os.path.join("test", "model", f"marlin_vit_large_ytf.encoder.pt")
-    MODEL_FULL_PATH: Optional[str] = os.path.join("test", "model", "marlin_vit_large_ytf.full.pt")
-    EMBEDDING_SIZE: Optional[int] = 1024
-
-
-class MarlinViTSmall(TestMarlinPytorch):
-    __test__ = True
-    MODEL_NAME: Optional[str] = "marlin_vit_small_ytf"
-    MODEL_ENCODER_PATH: Optional[str] = os.path.join("test", "model", f"marlin_vit_small_ytf.encoder.pt")
-    MODEL_FULL_PATH: Optional[str] = os.path.join("test", "model", "marlin_vit_small_ytf.full.pt")
-    EMBEDDING_SIZE: Optional[int] = 384

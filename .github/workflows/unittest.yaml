@@ -77,4 +77,8 @@ jobs:
         run: echo "PYTHONPATH=$(pwd)/src" >> $GITHUB_ENV
 
       - name: Run Test
-        run: python -m unittest discover test
+        run: | # python -m unittest discover test
+          python -m unittest test/test_version.py
+          python -m unittest test/test_marlin_vit_base.py
+          python -m unittest test/test_marlin_vit_small.py
+          python -m unittest test/test_marlin_vit_large.py

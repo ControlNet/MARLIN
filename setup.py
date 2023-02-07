@@ -1,11 +1,11 @@
 import init
 import setuptools
 
-with open("README.md", "r") as file:
+with open("README.md", "r", encoding="UTF-8") as file:
     long_description = file.read()
 
 requirements = []
-with open("requirements.lib.txt", "r") as file:
+with open("requirements.lib.txt", "r", encoding="UTF-8") as file:
     for line in file:
         requirements.append(line.strip())
 
