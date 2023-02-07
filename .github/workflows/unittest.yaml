@@ -44,6 +44,11 @@ jobs:
     steps:
       - uses: actions/checkout@v3
 
+      - name: Set Swap Space
+        uses: pierotofy/set-swap-space@master
+        with:
+          swap-size-gb: 10
+
       - name: Set up Python
         uses: actions/setup-python@v4
         with:
@@ -66,11 +71,19 @@ jobs:
       - name: Download model checkpoints
         run: |
           mkdir test/model
-          wget -O test/model/marlin.encoder.pt https://github.com/ControlNet/MARLIN/releases/download/model_v1/marlin.encoder.pt
-          wget -O test/model/marlin.full.pt https://github.com/ControlNet/MARLIN/releases/download/model_v1/marlin.full.pt
+          wget -O test/model/marlin_vit_base_ytf.encoder.pt https://github.com/ControlNet/MARLIN/releases/download/model_v1/marlin_vit_base_ytf.encoder.pt
+          wget -O test/model/marlin_vit_base_ytf.full.pt https://github.com/ControlNet/MARLIN/releases/download/model_v1/marlin_vit_base_ytf.full.pt
+          wget -O test/model/marlin_vit_small_ytf.encoder.pt https://github.com/ControlNet/MARLIN/releases/download/model_v1/marlin_vit_small_ytf.encoder.pt
+          wget -O test/model/marlin_vit_small_ytf.full.pt https://github.com/ControlNet/MARLIN/releases/download/model_v1/marlin_vit_small_ytf.full.pt
+          wget -O test/model/marlin_vit_large_ytf.encoder.pt https://github.com/ControlNet/MARLIN/releases/download/model_v1/marlin_vit_large_ytf.encoder.pt
+          wget -O test/model/marlin_vit_large_ytf.full.pt https://github.com/ControlNet/MARLIN/releases/download/model_v1/marlin_vit_large_ytf.full.pt
 
       - name: Set PYTHONPATH
         run: echo "PYTHONPATH=$(pwd)/src" >> $GITHUB_ENV
 
       - name: Run Test
-        run: python -m unittest discover test
+        run: | # python -m unittest discover test
+          python -m unittest test/test_version.py
+          python -m unittest test/test_marlin_vit_base.py
+          python -m unittest test/test_marlin_vit_small.py
+          python -m unittest test/test_marlin_vit_large.py

@@ -105,3 +105,8 @@ def crop_with_padding(image: ndarray, x1: int, x2: int, y1: int, y2: int, pad_va
         image[:, image_y_start:image_y_end, image_x_start:image_x_end]
 
     return cropped if batch else cropped[0]
+
+
+class NoArgInit:
+    def __init__(self):
+        pass
