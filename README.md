@@ -164,7 +164,7 @@ Download the [YoutubeFaces](https://www.cs.tau.ac.il/~wolf/ytfaces/) dataset (on
 Download the face parsing model from [face_parsing.farl.lapa](https://github.com/FacePerceiver/facer/releases/download/models-v1/face_parsing.farl.lapa.main_ema_136500_jit191.pt)
 and put it in `utils/face_sdk/models/face_parsing/face_parsing_1.0`.
 
-Download the VideoMAE pretrained [checkpoint](https://github.com/ControlNet/MARLIN/releases/download/misc/checkpoint.pth) 
+Download the VideoMAE pretrained [checkpoint](https://github.com/ControlNet/MARLIN/releases/misc) 
 for initializing the weights. (ps. They updated their models in this 
 [commit](https://github.com/MCG-NJU/VideoMAE/commit/2b56a75d166c619f71019e3d1bb1c4aedafe7a90), but we are using the 
 old models which are not shared anymore by the authors. So we uploaded this model by ourselves.)
