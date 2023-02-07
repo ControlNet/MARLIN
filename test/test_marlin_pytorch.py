@@ -16,12 +16,12 @@ class TestMarlinPytorch(unittest.TestCase):
     VIT_LARGE_NAME = "marlin_vit_large_ytf"
     VIT_SMALL_NAME = "marlin_vit_small_ytf"
 
-    VIT_BASE_MODEL_FULL_PATH = os.path.join("model", "marlin_vit_base_ytf.full.pt")
-    VIT_BASE_MODEL_ENCODER_PATH = os.path.join("model", "marlin_vit_base_ytf.encoder.pt")
-    VIT_LARGE_MODEL_FULL_PATH = os.path.join("model", "marlin_vit_large_ytf.full.pt")
-    VIT_LARGE_MODEL_ENCODER_PATH = os.path.join("model", "marlin_vit_large_ytf.encoder.pt")
-    VIT_SMALL_MODEL_FULL_PATH = os.path.join("model", "marlin_vit_small_ytf.full.pt")
-    VIT_SMALL_MODEL_ENCODER_PATH = os.path.join("model", "marlin_vit_small_ytf.encoder.pt")
+    VIT_BASE_MODEL_FULL_PATH = os.path.join("test", "model", "marlin_vit_base_ytf.full.pt")
+    VIT_BASE_MODEL_ENCODER_PATH = os.path.join("test", "model", "marlin_vit_base_ytf.encoder.pt")
+    VIT_LARGE_MODEL_FULL_PATH = os.path.join("test", "model", "marlin_vit_large_ytf.full.pt")
+    VIT_LARGE_MODEL_ENCODER_PATH = os.path.join("test", "model", "marlin_vit_large_ytf.encoder.pt")
+    VIT_SMALL_MODEL_FULL_PATH = os.path.join("test", "model", "marlin_vit_small_ytf.full.pt")
+    VIT_SMALL_MODEL_ENCODER_PATH = os.path.join("test", "model", "marlin_vit_small_ytf.encoder.pt")
 
     def test_load_full_model_from_file(self):
         Marlin.from_file(self.VIT_BASE_NAME, self.VIT_BASE_MODEL_FULL_PATH)
