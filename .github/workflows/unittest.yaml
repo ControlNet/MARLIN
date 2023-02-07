@@ -66,8 +66,12 @@ jobs:
       - name: Download model checkpoints
         run: |
           mkdir test/model
-          wget -O test/model/marlin.encoder.pt https://github.com/ControlNet/MARLIN/releases/download/model_v1/marlin.encoder.pt
-          wget -O test/model/marlin.full.pt https://github.com/ControlNet/MARLIN/releases/download/model_v1/marlin.full.pt
+          wget -O test/model/marlin_vit_base_ytf.encoder.pt https://github.com/ControlNet/MARLIN/releases/download/model_v1/marlin_vit_base_ytf.encoder.pt
+          wget -O test/model/marlin_vit_base_ytf.full.pt https://github.com/ControlNet/MARLIN/releases/download/model_v1/marlin_vit_base_ytf.full.pt
+          wget -O test/model/marlin_vit_small_ytf.encoder.pt https://github.com/ControlNet/MARLIN/releases/download/model_v1/marlin_vit_small_ytf.encoder.pt
+          wget -O test/model/marlin_vit_small_ytf.full.pt https://github.com/ControlNet/MARLIN/releases/download/model_v1/marlin_vit_small_ytf.full.pt
+          wget -O test/model/marlin_vit_large_ytf.encoder.pt https://github.com/ControlNet/MARLIN/releases/download/model_v1/marlin_vit_large_ytf.encoder.pt
+          wget -O test/model/marlin_vit_large_ytf.full.pt https://github.com/ControlNet/MARLIN/releases/download/model_v1/marlin_vit_large_ytf.full.pt
 
       - name: Set PYTHONPATH
         run: echo "PYTHONPATH=$(pwd)/src" >> $GITHUB_ENV

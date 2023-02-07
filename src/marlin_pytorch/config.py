@@ -75,8 +75,8 @@ class MarlinVitBaseConfig(NoArgInit, SharedConfig, Downloadable):
     decoder_embed_dim = 384
     decoder_depth = 4
     decoder_num_heads = 6
-    full_model_url = "https://github.com/ControlNet/MARLIN/releases/download/model_v1/marlin.full.pt"
-    encoder_model_url = "https://github.com/ControlNet/MARLIN/releases/download/model_v1/marlin.encoder.pt"
+    full_model_url = "https://github.com/ControlNet/MARLIN/releases/download/model_v1/marlin_vit_base_ytf.full.pt"
+    encoder_model_url = "https://github.com/ControlNet/MARLIN/releases/download/model_v1/marlin_vit_base_ytf.encoder.pt"
 
 
 @register_model("marlin_vit_small_ytf")
@@ -88,6 +88,10 @@ class MarlinVitSmallConfig(NoArgInit, SharedConfig, Downloadable):
     decoder_embed_dim = 192
     decoder_depth = 4
     decoder_num_heads = 3
+    full_model_url = \
+        "https://github.com/ControlNet/MARLIN/releases/download/model_v1/marlin_vit_small_ytf.full.pt"
+    encoder_model_url = \
+        "https://github.com/ControlNet/MARLIN/releases/download/model_v1/marlin_vit_small_ytf.encoder.pt"
 
 
 @register_model("marlin_vit_large_ytf")
@@ -99,6 +103,10 @@ class MarlinVitLargeConfig(NoArgInit, SharedConfig, Downloadable):
     decoder_embed_dim = 512
     decoder_depth = 12
     decoder_num_heads = 8
+    full_model_url = \
+        "https://github.com/ControlNet/MARLIN/releases/download/model_v1/marlin_vit_large_ytf.full.pt"
+    encoder_model_url = \
+        "https://github.com/ControlNet/MARLIN/releases/download/model_v1/marlin_vit_large_ytf.encoder.pt"
 
 
 def register_model_from_yaml(name: str, path: str) -> None:
