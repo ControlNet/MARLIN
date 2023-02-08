@@ -101,7 +101,7 @@ from marlin_pytorch import Marlin
 # Load MARLIN model from local file
 model = Marlin.from_file("marlin_vit_base_ytf", "path/to/marlin.pt")
 # Load MARLIN model from the ckpt file trained by the scripts in this repo
-model = Marlin.from_ckpt("marlin_vit_base_ytf", "path/to/marlin.ckpt")
+model = Marlin.from_file("marlin_vit_base_ytf", "path/to/marlin.ckpt")
 ```
 
 Current model name list:
