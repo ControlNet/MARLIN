@@ -220,7 +220,7 @@ from marlin_pytorch import Marlin
 from marlin_pytorch.config import register_model_from_yaml
 
 register_model_from_yaml("my_marlin_model", "path/to/config.yaml")
-model = Marlin.from_ckpt("my_marlin_model", "path/to/marlin.ckpt")
+model = Marlin.from_file("my_marlin_model", "path/to/marlin.ckpt")
 ```
 
 ## References
