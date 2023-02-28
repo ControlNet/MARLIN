@@ -37,7 +37,7 @@
 </div>
 
 This repo is the official PyTorch implementation for the paper 
-[MARLIN: Masked Autoencoder for facial video Representation LearnINg](https://arxiv.org/abs/2211.06627).
+[MARLIN: Masked Autoencoder for facial video Representation LearnINg](https://arxiv.org/abs/2211.06627) (CVPR 2023).
 
 ## Repository Structure
 
