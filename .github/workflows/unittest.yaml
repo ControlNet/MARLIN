@@ -91,6 +91,7 @@ jobs:
   coverage:
     # Run coverage and report to coveralls
     name: Coverage
+    needs: [unittest]
     runs-on: ubuntu-20.04
 
     steps:
