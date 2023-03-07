@@ -87,3 +87,64 @@ jobs:
           python -m unittest test/test_marlin_vit_base.py
           python -m unittest test/test_marlin_vit_small.py
           python -m unittest test/test_marlin_vit_large.py
+
+  coverage:
+    # Run coverage and report to coveralls
+    name: Coverage
+    needs: [unittest]
+    runs-on: ubuntu-20.04
+
+    steps:
+      - uses: actions/checkout@v2
+
+      - name: Set up Python
+        uses: actions/setup-python@v2
+        with:
+          python-version: "3.10"
+          architecture: x64
+
+      - name: Install dependencies
+        run: |
+          sudo apt install -y ffmpeg wget
+          pip install torch=="1.13.*"
+          pip install torchvision=="0.14.*"
+          pip install -r requirements.lib.txt
+          python init.py
+          pip install coverage pytest coveralls
+
+      - name: Download model checkpoints
+        run: |
+          mkdir test/model
+          wget -O test/model/marlin_vit_base_ytf.encoder.pt https://github.com/ControlNet/MARLIN/releases/download/model_v1/marlin_vit_base_ytf.encoder.pt
+          wget -O test/model/marlin_vit_base_ytf.full.pt https://github.com/ControlNet/MARLIN/releases/download/model_v1/marlin_vit_base_ytf.full.pt
+          wget -O test/model/marlin_vit_small_ytf.encoder.pt https://github.com/ControlNet/MARLIN/releases/download/model_v1/marlin_vit_small_ytf.encoder.pt
+          wget -O test/model/marlin_vit_small_ytf.full.pt https://github.com/ControlNet/MARLIN/releases/download/model_v1/marlin_vit_small_ytf.full.pt
+          wget -O test/model/marlin_vit_large_ytf.encoder.pt https://github.com/ControlNet/MARLIN/releases/download/model_v1/marlin_vit_large_ytf.encoder.pt
+          wget -O test/model/marlin_vit_large_ytf.full.pt https://github.com/ControlNet/MARLIN/releases/download/model_v1/marlin_vit_large_ytf.full.pt
+
+      - name: Set PYTHONPATH
+        run: echo "PYTHONPATH=$(pwd)/src" >> $GITHUB_ENV
+
+      - name: Run Coverage
+        run: coverage run --source=marlin_pytorch -m unittest discover
+
+      - name: Coveralls
+        run: coveralls --service=github
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+          COVERALLS_FLAG_NAME: marlin_pytorch
+          COVERALLS_PARALLEL: true
+
+  coveralls_finish:
+    name: Coveralls Finish
+    needs: [coverage]
+    runs-on: ubuntu-20.04
+    container: python:3-slim
+
+    steps:
+      - name: Finished
+        run: |
+          pip3 install --upgrade coveralls
+          coveralls --service=github --finish
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}

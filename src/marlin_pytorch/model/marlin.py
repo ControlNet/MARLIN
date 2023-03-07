@@ -167,7 +167,7 @@ class Marlin(Module):
             cap = cv2.VideoCapture(video_path)
             deq = deque(maxlen=self.clip_frames)
 
-            clip_start_indexes = list(range(0, total_frames - self.clip_frames * sample_rate, stride))
+            clip_start_indexes = list(range(0, total_frames - self.clip_frames * sample_rate, stride * sample_rate))
             clip_end_indexes = [i + self.clip_frames * sample_rate - 1 for i in clip_start_indexes]
 
             current_index = -1
