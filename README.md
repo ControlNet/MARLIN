@@ -228,7 +228,7 @@ model = Marlin.from_file("my_marlin_model", "path/to/marlin.ckpt")
 ```
 
 ## References
-If you find this work useful in your research, please cite it.
+If you find this work useful for your research, please consider citing it.
 ```bibtex
 @article{cai2022marlin,
   title = {MARLIN: Masked Autoencoder for facial video Representation LearnINg},
