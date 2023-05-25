@@ -41,7 +41,7 @@
 </div>
 
 This repo is the official PyTorch implementation for the paper 
-[MARLIN: Masked Autoencoder for facial video Representation LearnINg](https://arxiv.org/abs/2211.06627) (CVPR 2023).
+[MARLIN: Masked Autoencoder for facial video Representation LearnINg](https://openaccess.thecvf.com/content/CVPR2023/html/Cai_MARLIN_Masked_Autoencoder_for_Facial_Video_Representation_LearnINg_CVPR_2023_paper) (CVPR 2023).
 
 ## Repository Structure
 
@@ -230,11 +230,13 @@ model = Marlin.from_file("my_marlin_model", "path/to/marlin.ckpt")
 ## References
 If you find this work useful for your research, please consider citing it.
 ```bibtex
-@article{cai2022marlin,
+@inproceedings{cai2022marlin,
   title = {MARLIN: Masked Autoencoder for facial video Representation LearnINg},
   author = {Cai, Zhixi and Ghosh, Shreya and Stefanov, Kalin and Dhall, Abhinav and Cai, Jianfei and Rezatofighi, Hamid and Haffari, Reza and Hayat, Munawar},
-  journal = {arXiv preprint arXiv:2211.06627},
-  year = {2022},
+  booktitle = {Proceedings of the IEEE/CVF Conference on Computer Vision and Pattern Recognition (CVPR)},
+  year = {2023},
+  month = {June},
+  pages = {1493-1504}
 }
 ```
 

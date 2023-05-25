@@ -1,7 +1,8 @@
 cff-version: 1.2.0
 message: "If you find this work useful in your research, please cite it."
 preferred-citation:
-  type: article
+  type: conference-paper
+  title: "MARLIN: Masked Autoencoder for facial video Representation LearnINg"
   authors:
   - family-names: "Cai"
     given-names: "Zhixi"
@@ -19,6 +20,9 @@ preferred-citation:
     given-names: "Reza"
   - family-names: "Hayat"
     given-names: "Munawar"
-  journal: "arXiv preprint arXiv:2211.06627"
-  title: "MARLIN: Masked Autoencoder for facial video Representation LearnINg"
-  year: 2022
+  collection-title: "Proceedings of the IEEE/CVF Conference on Computer Vision and Pattern Recognition"
+  year: 2023
+  location:
+    name: "Vancouver, Canada"
+  start: 1493
+  end: 1504
