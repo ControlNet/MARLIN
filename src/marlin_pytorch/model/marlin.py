@@ -149,16 +149,14 @@ class Marlin(Module):
         return features
 
     def _load_video(self, video_path: str, sample_rate: int, stride: int) -> Generator[Tensor, None, None]:
-        probe = ffmpeg.probe(video_path)
-        total_frames = int(probe["streams"][0]["nb_frames"])
+        video = read_video(video_path, channel_first=True) / 255  # (T, C, H, W)
+        total_frames = video.shape[0]
         if total_frames <= self.clip_frames:
-            video = read_video(video_path, channel_first=True) / 255  # (T, C, H, W)
             # pad frames to 16
             v = padding_video(video, self.clip_frames, "same")  # (T, C, H, W)
             assert v.shape[0] == self.clip_frames
             yield v.permute(1, 0, 2, 3).unsqueeze(0).to(self.device)
         elif total_frames <= self.clip_frames * sample_rate:
-            video = read_video(video_path, channel_first=True) / 255  # (T, C, H, W)
             # use first 16 frames
             v = video[:self.clip_frames]
             yield v.permute(1, 0, 2, 3).unsqueeze(0).to(self.device)
