@@ -157,7 +157,7 @@ class Marlin(Module):
             v = padding_video(video, self.clip_frames, "same")  # (T, C, H, W)
             assert v.shape[0] == self.clip_frames
             yield v.permute(1, 0, 2, 3).unsqueeze(0).to(self.device)
-        elif total_frames < self.clip_frames * sample_rate:
+        elif total_frames <= self.clip_frames * sample_rate:
             video = read_video(video_path, channel_first=True) / 255  # (T, C, H, W)
             # use first 16 frames
             v = video[:self.clip_frames]
