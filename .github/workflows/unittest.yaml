@@ -61,6 +61,7 @@ jobs:
         if: matrix.python-version == '3.6'
         run: |
           sudo apt install -y libavformat-dev libavdevice-dev
+          pip install "av==6.*"
 
       - name: Install dependencies
         run: |
