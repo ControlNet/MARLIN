@@ -16,7 +16,7 @@
         <img src="https://img.shields.io/github/issues/ControlNet/MARLIN?style=flat-square">
     </a>
     <a href="https://github.com/ControlNet/MARLIN/blob/master/LICENSE">
-        <img src="https://img.shields.io/badge/license-CC--BY--NC%204.0-97ca00?style=flat-square">
+        <img src="https://img.shields.io/badge/license-CC%20BY--NC%204.0-97ca00?style=flat-square">
     </a>
     <a href="https://arxiv.org/abs/2211.06627">
         <img src="https://img.shields.io/badge/arXiv-2211.06627-b31b1b.svg?style=flat-square">
@@ -248,7 +248,7 @@ If you find this work useful for your research, please consider citing it.
 
 ## License
 
-This project is under the CC-BY-NC 4.0 license. See [LICENSE](LICENSE) for details.
+This project is under the CC BY-NC 4.0 license. See [LICENSE](LICENSE) for details.
 
 ## Acknowledgements
 
