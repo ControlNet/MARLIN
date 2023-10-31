@@ -12,8 +12,8 @@ jobs:
     strategy:
       fail-fast: false
       matrix:
-        python-version: ["3.6", "3.7", "3.8", "3.9", "3.10"]
-        torch-version: ["1.8.*", "1.9.*", "1.10.*", "1.11.*", "1.12.*", "1.13.*"]
+        python-version: ["3.6", "3.7", "3.8", "3.9", "3.10", "3.11"]
+        torch-version: ["1.8.*", "1.9.*", "1.10.*", "1.11.*", "1.12.*", "1.13.*", "2.0.*", "2.1.*"]
         include:
           - torch-version: "1.8.*"
             torchvision-version: "0.9.*"
@@ -27,6 +27,10 @@ jobs:
             torchvision-version: "0.13.*"
           - torch-version: "1.13.*"
             torchvision-version: "0.14.*"
+          - torch-version: "2.0.*"
+            torchvision-version: "0.15.*"
+          - torch-version: "2.1.*"
+            torchvision-version: "0.16.*"
         exclude:
           - python-version: "3.6"
             torch-version: "1.11.*"
@@ -34,11 +38,21 @@ jobs:
             torch-version: "1.12.*"
           - python-version: "3.6"
             torch-version: "1.13.*"
+          - python-version: "3.6"
+            torch-version: "2.0.*"
+          - python-version: "3.6"
+            torch-version: "2.1.*"
           - python-version: "3.10"
             torch-version: "1.8.*"
           - python-version: "3.10"
             torch-version: "1.9.*"
           - python-version: "3.10"
+            torch-version: "1.10.*"
+          - python-version: "3.11"
+            torch-version: "1.8.*"
+          - python-version: "3.11"
+            torch-version: "1.9.*"
+          - python-version: "3.11"
             torch-version: "1.10.*"
 
     runs-on: ubuntu-20.04
