@@ -231,6 +231,10 @@ register_model_from_yaml("my_marlin_model", "path/to/config.yaml")
 model = Marlin.from_file("my_marlin_model", "path/to/marlin.ckpt")
 ```
 
+## License
+
+This project is under the CC BY-NC 4.0 license. See [LICENSE](LICENSE) for details.
+
 ## References
 If you find this work useful for your research, please consider citing it.
 ```bibtex
@@ -245,10 +249,6 @@ If you find this work useful for your research, please consider citing it.
   publisher = {IEEE},
 }
 ```
-
-## License
-
-This project is under the CC BY-NC 4.0 license. See [LICENSE](LICENSE) for details.
 
 ## Acknowledgements
 
