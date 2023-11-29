@@ -1,0 +1,8 @@
+model_name: "celebvhq_marlin_action_lp"
+backbone: "marlin_vit_base_ytf"
+dataset: "celebvhq"
+task: "action"
+temporal_reduction: "mean"
+learning_rate: 1.0e-4
+seq_mean_pool: true
+finetune: false

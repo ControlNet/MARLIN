@@ -1,5 +1,6 @@
 from __future__ import annotations
 
+import json
 import re
 
 import torch
@@ -44,3 +45,14 @@ def sample_indexes(total_frames: int, n_frames: int, temporal_sample_rate: int) 
         print(f"total_frames: {total_frames}, n_frames: {n_frames}, temporal_sample_rate: {temporal_sample_rate}")
         raise e
     return torch.arange(n_frames) * temporal_sample_rate + start_ind
+
+
+def read_text(path: str, encoding: str = "UTF-8") -> str:
+    with open(path, "r", encoding=encoding) as file:
+        text = file.read()
+    return text
+
+
+def read_json(path: str):
+    with open(path, "r") as file:
+        return json.load(file)

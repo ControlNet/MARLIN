@@ -231,6 +231,48 @@ register_model_from_yaml("my_marlin_model", "path/to/config.yaml")
 model = Marlin.from_file("my_marlin_model", "path/to/marlin.ckpt")
 ```
 
+## Evaluation
+
+<details>
+<summary>CelebV-HQ</summary>
+
+#### 1. Download the dataset
+Download dataset from [CelebV-HQ](https://github.com/CelebV-HQ/CelebV-HQ) and the file structure should be like this:
+```
+├── CelebV-HQ
+│   ├── downloaded
+│   │   ├── ***.mp4
+│   │   ├── ...
+│   ├── celebvhq_info.json
+│   ├── ...
+```
+#### 2. Preprocess the dataset
+Crop the face region from the raw video and split the train val and test sets.
+```bash
+python preprocess/celebvhq_preprocess.py --data_dir /path/to/CelebV-HQ 
+```
+
+#### 3. Extract MARLIN features (Optional, if linear probing)
+Extract MARLIN features from the cropped video and saved to `<backbone>` directory in `CelebV-HQ` directory.
+```bash
+python preprocess/celebvhq_extract.py --data_dir /path/to/CelebV-HQ --backbone marlin_vit_base_ytf
+```
+
+#### 4. Train and evaluate
+Train and evaluate the model adapted from MARLIN to CelebV-HQ.
+
+Please use the configs in `config/celebv_hq/*/*.yaml` as the config file.
+```bash
+python evaluate.py \
+    --config /path/to/config \
+    --data_path /path/to/CelebV-HQ 
+    --num_workers 4 
+    --batch_size 16
+```
+
+</details>
+
+
 ## License
 
 This project is under the CC BY-NC 4.0 license. See [LICENSE](LICENSE) for details.
