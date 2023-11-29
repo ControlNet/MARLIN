@@ -74,7 +74,7 @@ The repository contains 2 parts:
 ├── dataset              # Dataloaders
 ├── utils                # Utility functions
 ├── train.py             # Training script
-├── evaluate.py          # Evaluation script (TODO)
+├── evaluate.py          # Evaluation script
 ├── requirements.txt
 
 ```
