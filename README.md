@@ -82,7 +82,7 @@ The repository contains 2 parts:
 ## Use `marlin-pytorch` for Feature Extraction
 
 Requirements:
-- Python >= 3.6, < 3.11
+- Python >= 3.6, < 3.12
 - PyTorch >= 1.8
 - ffmpeg
 
@@ -150,7 +150,7 @@ features = model.extract_features(x, keep_seq=False)  # torch.Size([B, 768])
 ## Paper Implementation
 
 ### Requirements
-- Python >= 3.7, < 3.11
+- Python >= 3.7, < 3.12
 - PyTorch ~= 1.11
 - Torchvision ~= 0.12
 
