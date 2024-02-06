@@ -29,6 +29,8 @@ def train_celebvhq(args, config):
         num_classes = 40
     elif task == "action":
         num_classes = 35
+    elif task == "emotion": # [asroman]
+        num_classes = 8
     else:
         raise ValueError(f"Unknown task {task}")
 
@@ -39,7 +41,7 @@ def train_celebvhq(args, config):
             num_classes, config["backbone"], True, args.marlin_ckpt, "multilabel", config["learning_rate"],
             args.n_gpus > 1,
         )
-
+        
         dm = CelebvHqDataModule(
             data_path, finetune, task,
             batch_size=args.batch_size,
@@ -66,7 +68,7 @@ def train_celebvhq(args, config):
         dm.setup()
         return resume_ckpt, dm
 
-    strategy = None if n_gpus <= 1 else "ddp"
+    strategy = "ddp" #None if n_gpus <= 1 else "ddp"
     accelerator = "cpu" if n_gpus == 0 else "gpu"
 
     ckpt_filename = config["model_name"] + "-{epoch}-{val_auc:.3f}"
@@ -82,9 +84,10 @@ def train_celebvhq(args, config):
         monitor=ckpt_monitor,
         mode="max")
 
+    print("resume_ckpt", resume_ckpt)
     trainer = Trainer(log_every_n_steps=1, devices=n_gpus, accelerator=accelerator, benchmark=True,
         logger=True, precision=precision, max_epochs=max_epochs,
-        strategy=strategy, resume_from_checkpoint=resume_ckpt,
+        strategy=strategy, #resume_from_checkpoint=resume_ckpt,
         callbacks=[ckpt_callback, LrLogger(), EarlyStoppingLR(1e-6), SystemStatsLogger()])
 
     trainer.fit(model, dm)
@@ -137,11 +140,11 @@ if __name__ == '__main__':
     parser.add_argument("--data_path", type=str, help="Path to CelebV-HQ dataset.")
     parser.add_argument("--marlin_ckpt", type=str, default=None,
         help="Path to MARLIN checkpoint. Default: None, load from online.")
-    parser.add_argument("--n_gpus", type=int, default=1)
+    parser.add_argument("--n_gpus", type=int, default=2)
     parser.add_argument("--precision", type=str, default="32")
     parser.add_argument("--num_workers", type=int, default=8)
     parser.add_argument("--batch_size", type=int, default=32)
-    parser.add_argument("--epochs", type=int, default=2000, help="Max epochs to train.")
+    parser.add_argument("--epochs", type=int, default=200, help="Max epochs to train.")
     parser.add_argument("--resume", type=str, default=None, help="Path to checkpoint to resume training.")
     parser.add_argument("--skip_train", action="store_true", default=False,
         help="Skip training and evaluate only.")

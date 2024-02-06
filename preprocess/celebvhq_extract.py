@@ -18,7 +18,7 @@ if __name__ == '__main__':
     parser.add_argument("--data_dir", type=str)
     args = parser.parse_args()
 
-    model = Marlin.from_online(args.backbone)
+    model = Marlin.from_file("marlin_vit_base_ytf", "pretrained/marlin_vit_base_ytf.encoder.pt") #.from_online(args.backbone)
     config = resolve_config(args.backbone)
     feat_dir = args.backbone
 
