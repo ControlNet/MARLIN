@@ -1,6 +1,5 @@
 from typing import Optional, Union, Sequence, Dict, Literal, Any
 
-from memory_profiler import profile
 from pytorch_lightning import LightningModule
 from torch import Tensor
 from torch.nn import CrossEntropyLoss, Linear, Identity, BCEWithLogitsLoss
