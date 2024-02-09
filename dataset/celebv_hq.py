@@ -1,7 +1,7 @@
 import os
 from abc import ABC, abstractmethod
 from itertools import islice
-from typing import Optional
+from typing import Optional, List
 
 import ffmpeg
 import numpy as np
@@ -15,6 +15,7 @@ from util.misc import sample_indexes, read_text, read_json
 
 
 class CelebvHqBase(LightningDataModule, ABC):
+    emotions = ["neutral", "happy", "sadness", "anger", "fear", "surprise", "contempt", "disgust"]
 
     def __init__(self, data_root: str, split: str, task: str, data_ratio: float = 1.0, take_num: int = None):
         super().__init__()
@@ -26,7 +27,7 @@ class CelebvHqBase(LightningDataModule, ABC):
 
         self.name_list = list(
             filter(lambda x: x != "", read_text(os.path.join(data_root, f"{self.split}.txt")).split("\n")))
-        # self.metadata = read_json(os.path.join(data_root, "celebvhq_info.json"))
+        self.metadata = read_json(os.path.join(data_root, "celebvhq_info.json"))
 
         if data_ratio < 1.0:
             self.name_list = self.name_list[:int(len(self.name_list) * data_ratio)]
@@ -42,6 +43,16 @@ class CelebvHqBase(LightningDataModule, ABC):
     def __len__(self):
         return len(self.name_list)
 
+    @classmethod
+    def parse_emotion_label(cls, emotion_annotation: dict) -> List[int]:
+        labels = [0] * 8
+        if emotion_annotation["sep_flag"]:
+            for emo in emotion_annotation["labels"]:
+                labels[cls.emotions.index(emo["emotion"])] = 1
+            return labels
+        else:
+            labels[cls.emotions.index(emotion_annotation["labels"])] = 1
+        return labels
 
 # for fine-tuning
 class CelebvHq(CelebvHqBase):
@@ -60,9 +71,9 @@ class CelebvHq(CelebvHqBase):
         self.temporal_sample_rate = temporal_sample_rate
 
     def __getitem__(self, index: int):
-        #y = self.metadata["clips"][self.name_list[index]]["attributes"][self.task]
-        class_idx = int(self.name_list[index].split("-")[2])
-        y = torch.eye(8)[class_idx-1] # one-hot encoding for the emotion class
+        y = self.metadata["clips"][self.name_list[index]]["attributes"][self.task]
+        if self.task == "emotion":
+            y = self.parse_emotion_label(y)
         video_path = os.path.join(self.data_root, "cropped", self.name_list[index] + ".mp4")
 
         probe = ffmpeg.probe(video_path)["streams"][0]
@@ -125,9 +136,9 @@ class CelebvHqFeatures(CelebvHqBase):
         else:
             raise ValueError(self.temporal_reduction)
 
-        #y = self.metadata["clips"][self.name_list[index]]["attributes"][self.task]
-        class_idx = int(self.name_list[index].split("-")[2])
-        y = torch.eye(8)[class_idx-1] # one-hot emotion for the emotion class
+        y = self.metadata["clips"][self.name_list[index]]["attributes"][self.task]
+        if self.task == "emotion":
+            y = CelebvHq.parse_emotion_label(y)
 
         return x, torch.tensor(y, dtype=torch.long).bool()
 

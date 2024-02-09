@@ -1,9 +1,8 @@
 from typing import Optional, Union, Sequence, Dict, Literal, Any
 
-#from memory_profiler import profile [asroman]
 from pytorch_lightning import LightningModule
 from torch import Tensor
-from torch.nn import CrossEntropyLoss, Linear, Identity, BCEWithLogitsLoss
+from torch.nn import CrossEntropyLoss, Linear, BCEWithLogitsLoss
 from torch.optim import Adam
 from torch.optim.lr_scheduler import ReduceLROnPlateau
 from torchmetrics import Accuracy, AUROC

@@ -1,4 +1,4 @@
-model_name: "celebvhq_marlin_appearance_ft"
+model_name: "celebvhq_marlin_emotion_ft"
 backbone: "marlin_vit_base_ytf"
 dataset: "celebvhq"
 task: "emotion"
