@@ -29,6 +29,8 @@ def train_celebvhq(args, config):
         num_classes = 40
     elif task == "action":
         num_classes = 35
+    elif task == "emotion":
+        num_classes = 8
     else:
         raise ValueError(f"Unknown task {task}")
 
@@ -39,7 +41,7 @@ def train_celebvhq(args, config):
             num_classes, config["backbone"], True, args.marlin_ckpt, "multilabel", config["learning_rate"],
             args.n_gpus > 1,
         )
-
+        
         dm = CelebvHqDataModule(
             data_path, finetune, task,
             batch_size=args.batch_size,
