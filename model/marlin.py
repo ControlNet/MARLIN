@@ -257,8 +257,8 @@ class Marlin(LightningModule):
             **{k: v for k, v in d_result.items() if k != "loss"},
             **{k: v for k, v in g_result.items() if k != "loss"},
         }
-        self.log_dict({f"val_{k}": v for k, v in loss_dict.items()}, on_step=True, on_epoch=True,
-            prog_bar=False, sync_dist=self.distributed)
+        self.log_dict({f"val_{k}": v for k, v in loss_dict.items()}, on_step=False, on_epoch=True,
+            prog_bar=True, sync_dist=self.distributed)
         return loss_dict["loss"]
 
     def _log_sample_reconstruction_image(self, batch):
