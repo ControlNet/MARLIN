@@ -1,8 +1,8 @@
-from typing import Optional, Union, Sequence, Dict, Literal, Any
+from typing import Optional, Union, Sequence, Dict, Any
 
 from pytorch_lightning import LightningModule
 from torch import Tensor
-from torch.nn import CrossEntropyLoss, Linear, Identity, BCEWithLogitsLoss
+from torch.nn import CrossEntropyLoss, Linear, BCEWithLogitsLoss
 from torch.optim import Adam
 from torch.optim.lr_scheduler import ReduceLROnPlateau
 from torchmetrics import Accuracy, AUROC
@@ -15,7 +15,7 @@ class Classifier(LightningModule):
 
     def __init__(self, num_classes: int, backbone: str, finetune: bool,
         marlin_ckpt: Optional[str] = None,
-        task: Literal["binary", "multiclass", "multilabel"] = "binary",
+        task: str = "binary",
         learning_rate: float = 1e-4, distributed: bool = False
     ):
         super().__init__()
@@ -47,6 +47,8 @@ class Classifier(LightningModule):
             self.loss_fn = BCEWithLogitsLoss()
             self.acc_fn = Accuracy(task="binary", num_classes=1)
             self.auc_fn = AUROC(task="binary", num_classes=1)
+        else:
+            raise ValueError(f"Unknown task: {task}, it should be one of 'binary', 'multiclass', 'multilabel'.")
 
     @classmethod
     def from_module(cls, model, learning_rate: float = 1e-4, distributed=False):
