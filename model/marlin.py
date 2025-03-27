@@ -307,6 +307,7 @@ class Marlin(LightningModule):
         return values_factors
 
     def _cosine_scheduler_fn(self, epoch):
+        if epoch > 0: epoch -= 1  # lightning dependancy
         return self.lr_scheduler_factors[epoch]
 
     def configure_optimizers(self):
