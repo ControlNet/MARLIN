@@ -21,7 +21,7 @@
     <a href="https://arxiv.org/abs/2211.06627">
         <img src="https://img.shields.io/badge/arXiv-2211.06627-b31b1b.svg?style=flat-square">
     </a>
-    <a href="https://huggingface.co/ControlNet/MARLIN">
+    <a href="https://huggingface.co/collections/ControlNet/marlin-67e79296284080c98d95e3d9">
         <img src="https://img.shields.io/badge/huggingface-model-FFD21E?style=flat-square&logo=huggingface">
     </a>
 </div>
@@ -50,6 +50,7 @@ This repo is the official PyTorch implementation for the paper
 
 The repository contains 2 parts:
  - `marlin-pytorch`: The PyPI package for MARLIN used for inference.
+ - The HuggingFace wrapper for MARLIN used for inference.
  - The implementation for the paper including training and evaluation scripts.
 
 ```
@@ -69,6 +70,9 @@ The repository contains 2 parts:
 ├── setup.py
 ├── init.py
 ├── version.txt
+
+# below is for the huggingface wrapper
+├── hf_src
 
 # below is for the paper implementation
 ├── configs              # Configs for experiments settings
@@ -148,6 +152,29 @@ Extract features from video clip tensor
 x = ...  # video clip
 features = model.extract_features(x)  # torch.Size([B, k, 768])
 features = model.extract_features(x, keep_seq=False)  # torch.Size([B, 768])
+```
+
+## Use `transformers` (HuggingFace) for Feature Extraction
+
+Requirements:
+- Python
+- PyTorch
+- transformers
+- einops
+
+Currently the huggingface model is only for direct feature extraction without any video pre-processing (e.g. face detection, cropping, strided window, etc).
+
+
+```python
+import torch
+from transformers import AutoModel
+
+model = AutoModel.from_pretrained(
+    "ControlNet/marlin_vit_base_ytf",  # or other variants
+    trust_remote_code=True
+)
+tensor = torch.rand([1, 3, 16, 224, 224])  # (B, C, T, H, W)
+output = model(tensor)  # torch.Size([1, 1568, 384])
 ```
 
 ## Paper Implementation
