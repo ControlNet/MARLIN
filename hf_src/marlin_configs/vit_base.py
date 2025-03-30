@@ -1,4 +1,4 @@
-from marlin_huggingface import MarlinConfig, MarlinModel
+from marlin_huggingface import MarlinConfig
 
 
 vit_base_config = MarlinConfig(

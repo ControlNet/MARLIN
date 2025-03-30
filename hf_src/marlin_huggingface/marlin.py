@@ -124,9 +124,6 @@ class MarlinModel(PreTrainedModel):
             init_values=config.init_values,
             tubelet_size=config.tubelet_size,
         )
-    
-    def forward(self, x: Tensor, mask: Tensor = None) -> Tensor:
-        return self.marlin.forward(x, mask)
 
-    def extract_features(self, x: Tensor, keep_seq: bool = True):
+    def forward(self, x: Tensor, keep_seq: bool = True):
         return self.marlin.extract_features(x, keep_seq=keep_seq)

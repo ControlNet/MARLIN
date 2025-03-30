@@ -1,10 +1,10 @@
 from transformers import AutoModel, AutoConfig
 
-from marlin_huggingface.config import MarlinConfig
-from marlin_huggingface.marlin import Marlin, MarlinModel
+from .config import MarlinConfig
+from .marlin import Marlin, MarlinModel
 
 MarlinConfig.register_for_auto_class()
-MarlinModel.register_for_auto_class("AutoModel")
+MarlinModel.register_for_auto_class()
 AutoConfig.register("marlin", MarlinConfig)
 AutoModel.register(MarlinConfig, MarlinModel)
 
