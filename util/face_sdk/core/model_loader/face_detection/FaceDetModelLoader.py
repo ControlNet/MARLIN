@@ -28,5 +28,5 @@ class FaceDetModelLoader(BaseModelLoader):
         self.cfg['confidence_threshold'] = self.meta_conf['confidence_threshold']
 
     def load_model(self):
-        model = torch.load(self.cfg['model_file_path'])
+        model = torch.load(self.cfg['model_file_path'], weights_only=False)
         return model, self.cfg
